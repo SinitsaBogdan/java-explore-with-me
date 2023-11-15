@@ -12,6 +12,7 @@
     </parent>
 
     <artifactId>statistics-server</artifactId>
+    <name>statistics-service</name>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -32,7 +33,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.example</groupId>
+            <groupId>ru.practicum</groupId>
             <artifactId>statistics-dto</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
@@ -98,7 +99,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 

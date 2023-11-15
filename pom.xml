@@ -11,14 +11,15 @@
 	</parent>
 
 	<name>Explore With Me</name>
+
 	<modules>
 		<module>ewm-statistics-service</module>
 	</modules>
 
 	<groupId>ru.practicum</groupId>
 	<artifactId>explore-with-me</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
+	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
 		<java.version>11</java.version>
@@ -26,6 +27,7 @@
 	</properties>
 
 	<dependencies>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
