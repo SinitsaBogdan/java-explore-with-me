@@ -150,7 +150,7 @@ class StatisticControllerTest {
                 .app("app")
                 .uri("uri")
                 .ip("127.0.0.1")
-                .timestamp(LocalDateTime.now())
+                .endpointTimestamp(LocalDateTime.now())
                 .build();
     }
 }

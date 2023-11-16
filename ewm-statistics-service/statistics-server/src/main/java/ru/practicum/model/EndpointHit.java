@@ -37,5 +37,4 @@ public class EndpointHit {
     @Column(name = "time_stamp")
     @NotNull(message = "Параметр time_stamp не может быть пустым")
     private LocalDateTime timestamp;
-
 }
