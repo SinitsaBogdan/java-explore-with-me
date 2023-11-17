@@ -1,7 +1,6 @@
 package ru.practicum.client;
 
 import org.springframework.http.MediaType;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewEndpointDto;
@@ -31,8 +30,8 @@ public class StatisticsClient {
         webClient.post()
                 .uri("/hit")
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(endpointHitDto))
-                .exchange()
-                .block();
+                .bodyValue(endpointHitDto)
+                .retrieve()
+                .bodyToMono(Void.class);
     }
 }
