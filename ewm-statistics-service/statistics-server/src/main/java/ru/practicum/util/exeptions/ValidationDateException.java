@@ -1,4 +1,4 @@
-package ru.practicum.exeptions;
+package ru.practicum.util.exeptions;
 
 import lombok.extern.slf4j.Slf4j;
 

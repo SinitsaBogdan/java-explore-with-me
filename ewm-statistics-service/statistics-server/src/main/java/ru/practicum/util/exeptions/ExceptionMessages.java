@@ -1,4 +1,4 @@
-package ru.practicum.exeptions;
+package ru.practicum.util.exeptions;
 
 import lombok.Getter;
 
