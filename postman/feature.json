@@ -1,0 +1,403 @@
+{
+	"info": {
+		"_postman_id": "40a3025b-f1bd-45a5-80ec-d6e36833d7e3",
+		"name": "Test Explore With Me",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28187158"
+	},
+	"item": [
+		{
+			"name": "Модуль статистики",
+			"item": [
+				{
+					"name": "ok - Запрос статистики",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.be.ok;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Has user update response\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Проверка размера списка ответа\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).is.an('array');  // проверяем, что тело ответа является массивом\r",
+									"    pm.expect(jsonData.length, 'List length must be 0').to.eql(0);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{statisticsUrl}}/stats?start=2020-11-10 10:00:00&end=2023-11-20 15:00:00",
+							"host": [
+								"{{statisticsUrl}}"
+							],
+							"path": [
+								"stats"
+							],
+							"query": [
+								{
+									"key": "start",
+									"value": "2020-11-10 10:00:00"
+								},
+								{
+									"key": "end",
+									"value": "2023-11-20 15:00:00"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fail - Запрос статистики - без параметров",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.response.to.be.serverError;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Has user update response\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{statisticsUrl}}/stats",
+							"host": [
+								"{{statisticsUrl}}"
+							],
+							"path": [
+								"stats"
+							],
+							"query": [
+								{
+									"key": "start",
+									"value": "2023-11-10 10:00:00",
+									"disabled": true
+								},
+								{
+									"key": "end",
+									"value": "2023-11-20 15:00:00",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fail - Запрос статистики - start not valid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.be.clientError;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Has user update response\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{statisticsUrl}}/stats?start=2023-11-25 10:00:00&end=2023-11-20 15:00:00",
+							"host": [
+								"{{statisticsUrl}}"
+							],
+							"path": [
+								"stats"
+							],
+							"query": [
+								{
+									"key": "start",
+									"value": "2023-11-25 10:00:00"
+								},
+								{
+									"key": "end",
+									"value": "2023-11-20 15:00:00"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ok - Сохранение эндпоинта",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Has user update response\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test endpoint 'id' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('id');\r",
+									"    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);\r",
+									"});\r",
+									"pm.test(\"Test user 'app' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('app');\r",
+									"    pm.expect(jsonData.app, '\"app\" must be \"ewm-main-service\"').to.eql('ewm-main-service');\r",
+									"});\r",
+									"pm.test(\"Test user 'uri' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('uri');\r",
+									"    pm.expect(jsonData.uri, '\"uri\" must be \"/events/1\"').to.eql('/events/1');\r",
+									"});\r",
+									"pm.test(\"Test user 'ip' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('ip');\r",
+									"    pm.expect(jsonData.ip, '\"ip\" must be \"192.163.0.1\"').to.eql('192.163.0.1');\r",
+									"});\r",
+									"pm.test(\"Test user 'timestamp' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('timestamp');\r",
+									"    pm.expect(jsonData.timestamp, '\"timestamp\" must be \"192.163.0.1\"').to.eql('2022-09-06T11:00:23');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"app\": \"ewm-main-service\",\r\n  \"uri\": \"/events/1\",\r\n  \"ip\": \"192.163.0.1\",\r\n  \"timestamp\": \"2022-09-06 11:00:23\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{statisticsUrl}}/hit",
+							"host": [
+								"{{statisticsUrl}}"
+							],
+							"path": [
+								"hit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fail - Сохранение эндпоинта - пустой body",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Has user update response\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{statisticsUrl}}/hit",
+							"host": [
+								"{{statisticsUrl}}"
+							],
+							"path": [
+								"hit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fail - Сохранение эндпоинта - body без app",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Has user update response\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"uri\": \"/events/1\",\r\n  \"ip\": \"192.163.0.1\",\r\n  \"timestamp\": \"2022-09-06 11:00:23\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{statisticsUrl}}/hit",
+							"host": [
+								"{{statisticsUrl}}"
+							],
+							"path": [
+								"hit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ok - Запрос статистики",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.be.ok;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Has user update response\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Проверка размера списка ответа\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).is.an('array');  // проверяем, что тело ответа является массивом\r",
+									"    pm.expect(jsonData.length, 'List length must be 1').to.eql(1);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test endpointHit[0] 'app' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('app');\r",
+									"    pm.expect(jsonData[0].app, '\"app\" must be ewm-main-service').to.eql(\"ewm-main-service\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test endpointHit[0] 'uri' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('uri');\r",
+									"    pm.expect(jsonData[0].uri, '\"uri\" must be /events/1').to.eql(\"/events/1\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test endpointHit[0] 'hits' field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0]).to.have.property('hits');\r",
+									"    pm.expect(jsonData[0].hits, '\"hits\" must be 1').to.eql(1);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{statisticsUrl}}/stats?start=2020-11-10 10:00:00&end=2023-11-20 15:00:00",
+							"host": [
+								"{{statisticsUrl}}"
+							],
+							"path": [
+								"stats"
+							],
+							"query": [
+								{
+									"key": "start",
+									"value": "2020-11-10 10:00:00"
+								},
+								{
+									"key": "end",
+									"value": "2023-11-20 15:00:00"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "statisticsUrl",
+			"value": "http://localhost:9090",
+			"type": "string"
+		}
+	]
+}
