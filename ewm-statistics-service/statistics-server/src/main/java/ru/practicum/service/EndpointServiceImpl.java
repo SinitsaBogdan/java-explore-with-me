@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static ru.practicum.exeptions.ErrorMessages.VALIDATOR_ERROR__NOT_VALID_DATETIME;
+import static ru.practicum.exeptions.ExceptionMessages.VALIDATOR_ERROR__NOT_VALID_DATETIME;
 
 @Slf4j
 @Service
@@ -27,7 +27,7 @@ public class EndpointServiceImpl implements EndpointService {
     @Override
     @Transactional
     public EndpointHit save(EndpointHitDto endpointHitDto) {
-        return repository.save(EndpointHitMapper.mapperDtoToEntity(endpointHitDto));
+        return repository.save(EndpointHitMapper.INSTANCE.fromDto(endpointHitDto));
     }
 
     @Override

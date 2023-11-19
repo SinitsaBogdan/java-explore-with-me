@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Slf4j
 public class ValidationDateException extends RuntimeException {
 
-    public ValidationDateException(ErrorMessages message) {
+    public ValidationDateException(ExceptionMessages message) {
         super(message.getDescription());
         log.error("{} : {} : {}", LocalDateTime.now(), message.getCategory(), message.getDescription());
     }
