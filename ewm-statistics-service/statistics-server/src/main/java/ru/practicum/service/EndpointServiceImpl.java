@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewEndpointDto;
-import ru.practicum.exeptions.ValidationDateException;
+import ru.practicum.util.exeptions.ValidationDateException;
 import ru.practicum.mapper.EndpointHitMapper;
 import ru.practicum.model.EndpointHit;
 import ru.practicum.repo.EndpointRepository;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static ru.practicum.exeptions.ExceptionMessages.VALIDATOR_ERROR__NOT_VALID_DATETIME;
+import static ru.practicum.util.exeptions.ExceptionMessages.VALIDATOR_ERROR__NOT_VALID_DATETIME;
 
 @Slf4j
 @Service
