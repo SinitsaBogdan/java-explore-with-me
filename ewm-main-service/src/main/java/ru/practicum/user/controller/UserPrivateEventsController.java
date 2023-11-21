@@ -3,6 +3,7 @@ package ru.practicum.user.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.event.dto.*;
 import ru.practicum.event.service.EventService;
@@ -13,7 +14,7 @@ import javax.validation.constraints.Min;
 import java.util.List;
 
 @Slf4j
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping(path = "/users/{userId}/events")
 public class UserPrivateEventsController {
@@ -21,7 +22,7 @@ public class UserPrivateEventsController {
     private final EventService eventService;
 
     @GetMapping
-    public List<EventShortDto> getAll(
+    public List<EventShortDto> getAllEventShort(
             @PathVariable long userId,
             @Valid @RequestParam(defaultValue = "0") @Min(0) int from,
             @Valid @RequestParam(defaultValue = "10") @Min(1) int size

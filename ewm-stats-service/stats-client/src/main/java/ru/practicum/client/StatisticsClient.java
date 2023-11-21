@@ -12,7 +12,7 @@ public class StatisticsClient {
     private final WebClient webClient;
 
     public StatisticsClient(String serverUrl) {
-        webClient = WebClient.builder().baseUrl(serverUrl).build();
+        webClient = WebClient.create(serverUrl);
     }
 
     public List<ViewEndpointDto> findStats(String start, String end, List<String> uris, Boolean unique) {
