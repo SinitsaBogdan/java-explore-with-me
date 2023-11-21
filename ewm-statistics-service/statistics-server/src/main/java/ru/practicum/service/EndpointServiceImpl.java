@@ -27,7 +27,7 @@ public class EndpointServiceImpl implements EndpointService {
     @Override
     @Transactional
     public EndpointHit save(EndpointHitDto endpointHitDto) {
-        return repository.save(EndpointHitMapper.INSTANCE.fromDto(endpointHitDto));
+        return repository.save(EndpointHitMapper.fromDto(endpointHitDto));
     }
 
     @Override

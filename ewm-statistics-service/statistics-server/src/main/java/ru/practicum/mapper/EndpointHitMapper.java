@@ -1,15 +1,28 @@
 package ru.practicum.mapper;
 
-import org.mapstruct.factory.Mappers;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.model.EndpointHit;
 
-public interface EndpointHitMapper {
+public final class EndpointHitMapper {
 
-    EndpointHitMapper INSTANCE = Mappers.getMapper(EndpointHitMapper.class);
+    private EndpointHitMapper() {
+    }
 
-    EndpointHitDto toDto(EndpointHit user);
+    public static EndpointHitDto toDto(EndpointHit model) {
+        return EndpointHitDto.builder()
+                .app(model.getApp())
+                .uri(model.getUri())
+                .ip(model.getIp())
+                .endpointTimestamp(model.getTimestamp())
+                .build();
+    }
 
-    EndpointHit fromDto(EndpointHitDto userDto);
+    public static EndpointHit fromDto(EndpointHitDto dto) {
+        return EndpointHit.builder()
+                .app(dto.getApp())
+                .uri(dto.getUri())
+                .ip(dto.getIp())
+                .timestamp(dto.getEndpointTimestamp())
+                .build();
+    }
 }
-

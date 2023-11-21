@@ -7,12 +7,12 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Builder
 @Getter
 @Setter
+@Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @Table(name = "endpoints", schema = "public")
 public class EndpointHit {
 
