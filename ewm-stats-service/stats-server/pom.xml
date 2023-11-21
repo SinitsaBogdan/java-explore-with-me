@@ -7,12 +7,12 @@
 
     <parent>
         <groupId>ru.practicum</groupId>
-        <artifactId>statistics-service</artifactId>
+        <artifactId>stats-service</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>statistics-server</artifactId>
-    <name>statistics-service</name>
+    <artifactId>stats-server</artifactId>
+    <name>stats-service</name>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -34,7 +34,7 @@
 
         <dependency>
             <groupId>ru.practicum</groupId>
-            <artifactId>statistics-dto</artifactId>
+            <artifactId>stats-dto</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
@@ -50,13 +50,13 @@
         </dependency>
         <dependency>
             <groupId>ru.practicum</groupId>
-            <artifactId>statistics-dto</artifactId>
+            <artifactId>stats-dto</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>ru.practicum</groupId>
-            <artifactId>statistics-dto</artifactId>
+            <artifactId>stats-dto</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
