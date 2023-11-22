@@ -2,6 +2,7 @@ package ru.practicum.participationRequest.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.repo.EventRepository;
 import ru.practicum.event.util.EventState;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ParticipationRequestServiceImpl implements ParticipationRequestService {
 
     private final ParticipationRequestRepository participationRequestRepository;
@@ -30,12 +32,13 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     @Override
     public List<ParticipationRequestDto> getAll(long userId) {
         findUserById(userId);
-        return participationRequestRepository.findAllByRequesterId(userId).stream()
+        return participationRequestRepository.findAllByUserId(userId).stream()
                 .map(ParticipationRequestMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
+    @Transactional
     public ParticipationRequestDto create(long userId, long eventId) {
 
         User requester = findUserById(userId);
@@ -56,7 +59,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
         }
 
         ParticipationRequest participationRequest = new ParticipationRequest();
-        participationRequest.setRequester(requester);
+        participationRequest.setUser(requester);
         participationRequest.setEvent(event);
         participationRequest.setCreated(LocalDateTime.now());
         participationRequest.setStatus(event.getRequestModeration() && !event.getParticipantLimit().equals(0) ? ParticipationRequestState.PENDING : ParticipationRequestState.CONFIRMED);
@@ -65,11 +68,12 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     }
 
     @Override
+    @Transactional
     public ParticipationRequestDto patch(long userId, long requestId) {
         findUserById(userId);
         ParticipationRequest participationRequest = findParticipationRequestById(requestId);
 
-        if (!participationRequest.getRequester().getId().equals(userId)) {
+        if (!participationRequest.getUser().getId().equals(userId)) {
             throw new NotFoundException("Не найдено событий, доступных для редактирования!");
         }
 
@@ -79,16 +83,16 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     private ParticipationRequest findParticipationRequestById(long id) {
         return participationRequestRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Participation request with id=" + id + " was not found"));
+                .orElseThrow(() -> new NotFoundException("Заявка на участие с id " + id + " не найдена!"));
     }
 
     private User findUserById(long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("User with id=" + id + " was not found"));
+                .orElseThrow(() -> new NotFoundException("Пользователь с id " + id + " не найден!"));
     }
 
     private Event findEventById(long id) {
         return eventRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Event with id=" + id + " was not found"));
+                .orElseThrow(() -> new NotFoundException("Событие с id " + id + " не найдено!"));
     }
 }

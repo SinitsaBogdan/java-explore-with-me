@@ -22,16 +22,16 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CompilationServiceImpl implements CompilationService {
 
     private final CompilationRepository compilationRepository;
     private final EventRepository eventRepository;
 
     @Override
-    @Transactional(readOnly = true)
     public List<CompilationDto> getAll(Boolean pinned, int from, int size) {
         Pageable pageable = PageRequest.of(from, size);
-        return compilationRepository.findAllByPublic(pinned, pageable).stream()
+        return compilationRepository.findAllByPinned(pinned, pageable).stream()
                 .map(CompilationMapper::toDto)
                 .collect(Collectors.toList());
     }
@@ -73,6 +73,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional
     public void delete(long compId) {
         Compilation compilation = compilationRepository.findById(compId)
                 .orElseThrow(() -> new NotFoundException("Сборник с id " + compId + " не найден!"));
