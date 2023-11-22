@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class EventServiceImpl implements EventService {
 
     public static final int TWO_HOURS = 2;
@@ -62,7 +63,6 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<EventFullDto> getAllByAdmin(List<Long> users, List<EventState> states, List<Long> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, int from, int size) {
 
         Pageable pageable = PageRequest.of(from, size);
@@ -70,6 +70,8 @@ public class EventServiceImpl implements EventService {
         if (rangeEnd == null) rangeEnd = Constants.getMaxDateTime();
 
         Page<Event> page = eventRepository.findAllByAdmin(users, states, categories, rangeStart, rangeEnd, pageable);
+
+        System.out.println(page.stream().collect(Collectors.toList()));
 
         List<String> eventUrls = page.getContent().stream()
                 .map(event -> "/events/" + event.getId())
@@ -87,12 +89,14 @@ public class EventServiceImpl implements EventService {
                             .findFirst();
 
                     dto.setViews(optionalViewEndpointDto.map(ViewEndpointDto::getHits).orElse(0L));
-                })
+                }
+                )
                 .peek(dto -> dto.setConfirmedRequests(participationRequestRepository.countByEventIdAndStatus(dto.getId(), ParticipationRequestState.CONFIRMED)))
                 .collect(Collectors.toList());
     }
 
     @Override
+    @Transactional
     public EventFullDto patchByAdmin(long eventId, EventRequestUpdateDto eventRequestUpdateDto) {
 
         Event event = findEventById(eventId);
@@ -148,6 +152,7 @@ public class EventServiceImpl implements EventService {
     public List<EventShortDto> getAllByInitiator(long userId, int from, int size) {
         Pageable pageable = PageRequest.of(from, size);
         Page<Event> page = eventRepository.findAllByInitiatorId(userId, pageable);
+        if (page.isEmpty()) return new ArrayList<>();
         return page.getContent().stream()
                 .map(EventMapper::toShortDto)
                 .collect(Collectors.toList());
@@ -170,6 +175,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public EventFullDto create(long userId, EventNewDto eventNewDto) {
 
         if (LocalDateTime.now().plusHours(TWO_HOURS).isAfter(eventNewDto.getEventTimestamp())) {
@@ -193,7 +199,9 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public EventFullDto patchByInitiator(long userId, long eventId, EventRequestUpdateDto eventRequestUpdateDto) {
+
         Event event = findEventById(eventId);
         checkInitiator(userId, eventId, event.getInitiator().getId());
 
@@ -217,6 +225,7 @@ public class EventServiceImpl implements EventService {
         Optional.ofNullable(eventRequestUpdateDto.getRequestModeration()).ifPresent(event::setRequestModeration);
 
         if (eventRequestUpdateDto.getEventStateAction() != null) {
+
             switch (eventRequestUpdateDto.getEventStateAction()) {
                 case SEND_TO_REVIEW:
                     event.setState(EventState.PENDING);
@@ -232,6 +241,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public EventResultUpdateStatusDto patchParticipationRequestsByInitiator(long userId, long eventId, EventRequestUpdateStatusDto eventRequestUpdateStatusDto) {
 
         findUserById(userId);
@@ -342,7 +352,7 @@ public class EventServiceImpl implements EventService {
         Event event = findEventById(eventId);
 
         if (event.getState() != EventState.PUBLISHED) {
-            throw new NotFoundException("Event with id=" + eventId + " was not found");
+            throw new NotFoundException("Событие с идентификатором " + eventId + " не найдено!");
         }
 
         List<String> eventUrls = Collections.singletonList("/events/" + event.getId());
@@ -359,22 +369,22 @@ public class EventServiceImpl implements EventService {
 
     private Event findEventById(long id) {
         return eventRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Event with id=" + id + " was not found"));
+                .orElseThrow(() -> new NotFoundException("Событие с идентификатором " + id + " не найдено!"));
     }
 
     private User findUserById(long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("User with id=" + id + " was not found"));
+                .orElseThrow(() -> new NotFoundException("Пользователь с идентификатором " + id + " не найден!"));
     }
 
     private Category findCategoryById(long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Category with id=" + id + " was not found"));
+                .orElseThrow(() -> new NotFoundException("Категория с идентификатором " + id + " не найдена!"));
     }
 
     private void checkInitiator(long userId, long eventId, long initiatorId) {
         if (userId != initiatorId) {
-            throw new NotFoundException("Event with id=" + eventId + " was not found");
+            throw new NotFoundException("Событие с идентификатором " + eventId + " не найдено!");
         }
     }
 
