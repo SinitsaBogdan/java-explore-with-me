@@ -3,7 +3,6 @@ package ru.practicum.compilation.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.compilation.dto.CompilationDto;
 import ru.practicum.compilation.dto.CompilationNewDto;
@@ -13,9 +12,9 @@ import ru.practicum.compilation.service.CompilationService;
 import javax.validation.Valid;
 
 @Slf4j
-@Controller
+@RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/admin/compilations")
+@RequestMapping("/admin/compilations")
 public class CompilationAdminController {
 
     private final CompilationService compilationService;
@@ -23,7 +22,7 @@ public class CompilationAdminController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CompilationDto create(@Valid @RequestBody CompilationNewDto compilationNewDto) {
-        log.info("  POST [http://localhost:8080/admin/compilations] : запрос на создание подборки событий {}", compilationNewDto);
+        log.info("\nPOST [http://localhost:8080/admin/compilations] : запрос на создание подборки событий {}\n", compilationNewDto);
         return compilationService.create(compilationNewDto);
     }
 
@@ -32,14 +31,14 @@ public class CompilationAdminController {
             @PathVariable long compId,
             @Valid @RequestBody CompilationRequestUpdateDto compilationRequestUpdateDto
     ) {
-        log.info(" PATCH [http://localhost:8080/admin/compilations/{}] : запрос на обновление подборки событий {} с ID {}", compId, compilationRequestUpdateDto, compId);
+        log.info("\nPATCH [http://localhost:8080/admin/compilations/{}] : запрос на обновление подборки событий {} с ID {}\n", compId, compilationRequestUpdateDto, compId);
         return compilationService.patch(compId, compilationRequestUpdateDto);
     }
 
     @DeleteMapping("/{compId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable long compId) {
-        log.info("DELETE [http://localhost:8080/admin/compilations/{}] : запрос на удаление подборки событий с ID {}", compId, compId);
+        log.info("\nDELETE [http://localhost:8080/admin/compilations/{}] : запрос на удаление подборки событий с ID {}\n", compId, compId);
         compilationService.delete(compId);
     }
 }

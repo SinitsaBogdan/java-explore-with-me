@@ -3,7 +3,7 @@ package ru.practicum.user.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.event.dto.*;
 import ru.practicum.event.service.EventService;
@@ -14,9 +14,10 @@ import javax.validation.constraints.Min;
 import java.util.List;
 
 @Slf4j
-@Controller
+@Validated
+@RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/users/{userId}/events")
+@RequestMapping("/users/{userId}/events")
 public class UserPrivateEventsController {
 
     private final EventService eventService;
@@ -27,7 +28,7 @@ public class UserPrivateEventsController {
             @Valid @RequestParam(defaultValue = "0") @Min(0) int from,
             @Valid @RequestParam(defaultValue = "10") @Min(1) int size
     ) {
-        log.info("   GET [http://localhost:8080/users/{}/events] : запрос на просмотр событий, добавленных пользователем с ID {}", userId, userId);
+        log.info("\nGET [http://localhost:8080/users/{}/events] : запрос на просмотр событий, добавленных пользователем с ID {}\n", userId, userId);
         return eventService.getAllByInitiator(userId, from, size);
     }
 
@@ -36,7 +37,7 @@ public class UserPrivateEventsController {
             @PathVariable long userId,
             @PathVariable long eventId
     ) {
-        log.info("   GET [http://localhost:8080/users/{}/events/{}] : запрос на просмотр события {}, добавленного пользователем с ID {}", userId, eventId, userId, eventId);
+        log.info("\nGET [http://localhost:8080/users/{}/events/{}] : запрос на просмотр события {}, добавленного пользователем с ID {}\n", userId, eventId, userId, eventId);
         return eventService.getByIdByInitiator(userId, eventId);
     }
 
@@ -45,7 +46,7 @@ public class UserPrivateEventsController {
             @PathVariable long userId,
             @PathVariable long eventId
     ) {
-        log.info("   GET [http://localhost:8080/users/{}/events/{}/requests] : запрос от инициатора {} события {} на просмотр запросов на участие в событии", userId, eventId, userId, eventId);
+        log.info("\nGET [http://localhost:8080/users/{}/events/{}/requests] : запрос от инициатора {} события {} на просмотр запросов на участие в событии\n", userId, eventId, userId, eventId);
         return eventService.getParticipationRequestsByInitiator(userId, eventId);
     }
 
@@ -55,7 +56,7 @@ public class UserPrivateEventsController {
             @PathVariable long userId,
             @Valid @RequestBody EventNewDto eventNewDto
     ) {
-        log.info("  POST [http://localhost:8080/users/{}/events] : запрос на добавление категории {} от пользователя с ID {}", userId, eventNewDto, userId);
+        log.info("\nPOST [http://localhost:8080/users/{}/events] : запрос на добавление события {} от пользователя с ID {}\n", userId, eventNewDto, userId);
         return eventService.create(userId, eventNewDto);
     }
 
@@ -65,7 +66,7 @@ public class UserPrivateEventsController {
             @PathVariable long eventId,
             @Valid @RequestBody EventRequestUpdateDto eventRequestUpdateDto
     ) {
-        log.info(" PATCH [http://localhost:8080/users/{}/events/{}] : запрос на обновление события {} пользователем с ID {}", userId, eventId, eventRequestUpdateDto, userId);
+        log.info("PATCH [http://localhost:8080/users/{}/events/{}] : запрос на обновление события {} пользователем с ID {}\n", userId, eventId, eventRequestUpdateDto, userId);
         return eventService.patchByInitiator(userId, eventId, eventRequestUpdateDto);
     }
 
@@ -75,7 +76,7 @@ public class UserPrivateEventsController {
             @PathVariable long eventId,
             @Valid @RequestBody EventRequestUpdateStatusDto eventRequestUpdateDto
     ) {
-        log.info(" PATCH [http://localhost:8080/users/{}/events/{}/requests] : запрос на обновление статусов запросов на участие в событии {}", userId, eventId, eventRequestUpdateDto, userId);
+        log.info("\nPATCH [http://localhost:8080/users/{}/events/{}/requests] : запрос на обновление статусов запросов на участие в событии {}\n", userId, eventId, eventRequestUpdateDto, userId);
         return eventService.patchParticipationRequestsByInitiator(userId, eventId, eventRequestUpdateDto);
     }
 }

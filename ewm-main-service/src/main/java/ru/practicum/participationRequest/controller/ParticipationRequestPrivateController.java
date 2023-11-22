@@ -3,7 +3,7 @@ package ru.practicum.participationRequest.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.participationRequest.dto.ParticipationRequestDto;
 import ru.practicum.participationRequest.service.ParticipationRequestService;
@@ -11,7 +11,8 @@ import ru.practicum.participationRequest.service.ParticipationRequestService;
 import java.util.List;
 
 @Slf4j
-@Controller
+@Validated
+@RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/users/{userId}/requests")
 public class ParticipationRequestPrivateController {
@@ -20,7 +21,7 @@ public class ParticipationRequestPrivateController {
 
     @GetMapping
     public List<ParticipationRequestDto> getAllParticipationRequest(@PathVariable long userId) {
-        log.info("   GET [http://localhost:8080/users/{userId}/requests] : запрос на просмотр запросов пользователя с ID {} на участие в событиях", userId, userId);
+        log.info("\nGET [http://localhost:8080/users/{userId}/requests] : запрос на просмотр запросов пользователя с ID {} на участие в событиях\n", userId, userId);
         return service.getAll(userId);
     }
 
@@ -30,7 +31,7 @@ public class ParticipationRequestPrivateController {
             @PathVariable long userId,
             @RequestParam long eventId
     ) {
-        log.info("  POST [http://localhost:8080/users/{userId}/requests] : запрос на создание запроса на участие в событии {} от пользователя {}", userId, eventId, userId);
+        log.info("\nPOST [http://localhost:8080/users/{}/requests?eventId={}] : запрос на создание запроса на участие в событии {} от пользователя {}\n", userId, eventId, eventId, userId);
         return service.create(userId, eventId);
     }
 
@@ -39,7 +40,7 @@ public class ParticipationRequestPrivateController {
             @PathVariable long userId,
             @PathVariable long requestId
     ) {
-        log.info(" PATCH [http://localhost:8080/users/{userId}/requests] : запрос на отмену запроса {} на участие в событии пользователем с ID {}", userId, requestId, userId);
+        log.info("\nPATCH [http://localhost:8080/users/{userId}/requests] : запрос на отмену запроса {} на участие в событии пользователем с ID {}\n", userId, requestId, userId);
         return service.patch(userId, requestId);
     }
 }

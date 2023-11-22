@@ -2,7 +2,6 @@ package ru.practicum.compilation.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.compilation.dto.CompilationDto;
 import ru.practicum.compilation.service.CompilationService;
@@ -12,7 +11,7 @@ import javax.validation.constraints.Min;
 import java.util.List;
 
 @Slf4j
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/compilations")
 public class CompilationPublicController {
@@ -25,13 +24,13 @@ public class CompilationPublicController {
             @Valid @RequestParam(defaultValue = "0") @Min(0) int from,
             @Valid @RequestParam(defaultValue = "10") @Min(1) int size
     ) {
-        log.info("   GET [http://localhost:8080/compilations] : запрос на просмотр подборок событий");
+        log.info("\nGET [http://localhost:8080/compilations] : запрос на просмотр подборок событий\n");
         return compilationService.getAll(pinned, from, size);
     }
 
     @GetMapping("/{compId}")
     public CompilationDto getById(@PathVariable long compId) {
-        log.info("   GET [http://localhost:8080/compilations/{}] : запрос для подборки событий по ID {}", compId, compId);
+        log.info("\nGET [http://localhost:8080/compilations/{}] : запрос для подборки событий по ID {}\n", compId, compId);
         return compilationService.getById(compId);
     }
 }

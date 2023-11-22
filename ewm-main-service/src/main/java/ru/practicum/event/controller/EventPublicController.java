@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import ru.practicum.dto.EndpointHitDto;
@@ -24,9 +24,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
-@Controller
+@Validated
+@RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/events")
+@RequestMapping("/events")
 public class EventPublicController {
 
     private final EventService eventService;
@@ -66,7 +67,7 @@ public class EventPublicController {
                 .endpointTimestamp(LocalDateTime.now())
                 .build());
 
-        log.info("   GET [http://localhost:8080/events] : запрос на просмотр событий по фильтрам");
+        log.info("\nGET [http://localhost:8080/events] : запрос на просмотр событий по фильтрам\n");
         return eventService.getAllPublic(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size, request);
     }
 
@@ -81,9 +82,21 @@ public class EventPublicController {
                 .uri(request.getRequestURI())
                 .ip(request.getRemoteAddr())
                 .endpointTimestamp(LocalDateTime.now())
-                .build());
+                .build()
+        );
 
-        log.info("   GET [http://localhost:8080/events/{}] : запрос на просмотр события по ID {}", eventId, eventId);
+        System.out.println();
+        System.out.println(request.getRequestURI());
+        System.out.println(
+                client.findStats(
+                        "2020-05-05 00:00:00",
+                        "2035-05-05 00:00:00",
+                        List.of(request.getRequestURI()), false
+                )
+        );
+        System.out.println();
+
+        log.info("\nGET [http://localhost:8080/events/{}] : запрос на просмотр события по ID {}\n", eventId, eventId);
         return eventService.getByIdPublic(eventId, request);
     }
 }
