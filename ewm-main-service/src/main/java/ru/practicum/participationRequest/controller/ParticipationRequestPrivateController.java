@@ -3,7 +3,7 @@ package ru.practicum.participationRequest.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.participationRequest.dto.ParticipationRequestDto;
 import ru.practicum.participationRequest.service.ParticipationRequestService;
@@ -11,7 +11,8 @@ import ru.practicum.participationRequest.service.ParticipationRequestService;
 import java.util.List;
 
 @Slf4j
-@Controller
+@Validated
+@RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/users/{userId}/requests")
 public class ParticipationRequestPrivateController {

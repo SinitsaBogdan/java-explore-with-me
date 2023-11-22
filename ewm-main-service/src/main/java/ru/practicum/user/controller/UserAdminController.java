@@ -2,10 +2,9 @@ package ru.practicum.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import ru.practicum.user.dto.UserDto;
 import ru.practicum.user.service.UserService;
 
@@ -14,7 +13,8 @@ import javax.validation.constraints.Min;
 import java.util.List;
 
 @Slf4j
-@Controller
+@Validated
+@RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/admin/users")
 public class UserAdminController {
@@ -29,5 +29,19 @@ public class UserAdminController {
     ) {
         log.info("   GET [http://localhost:8080/admin/users] : запрос на просмотр пользователей");
         return userService.get(ids, from, size);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserDto create(@Valid @RequestBody UserDto userDto) {
+        log.info("  POST [http://localhost:8080/admin/users] : запрос на создание пользователя {}", userDto);
+        return userService.create(userDto);
+    }
+
+    @DeleteMapping("/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable long userId) {
+        log.info("DELETE [http://localhost:8080/admin/users] : запрос на удаление пользователя {}", userId);
+        userService.delete(userId);
     }
 }
