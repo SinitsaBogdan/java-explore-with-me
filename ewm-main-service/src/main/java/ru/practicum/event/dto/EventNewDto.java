@@ -6,10 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import ru.practicum.location.dto.LocationDto;
 import ru.practicum.util.Constants;
 
-import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
+@Validated
 @NoArgsConstructor
 @AllArgsConstructor
 public class EventNewDto {
@@ -40,7 +41,6 @@ public class EventNewDto {
     private String description;
 
     @NotNull
-    @Future
     @JsonProperty("eventDate")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATE_TEMPLATE)
     private LocalDateTime eventTimestamp;
