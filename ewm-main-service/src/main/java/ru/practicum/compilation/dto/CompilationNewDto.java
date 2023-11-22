@@ -19,6 +19,7 @@ public class CompilationNewDto {
     @Size(max = 50)
     private String title;
 
-    private Boolean pinned;
+    @Builder.Default
+    private Boolean pinned = true;
     private List<Long> events;
 }

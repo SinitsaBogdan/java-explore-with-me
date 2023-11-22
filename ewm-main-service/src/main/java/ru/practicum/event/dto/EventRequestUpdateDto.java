@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.event.util.EventStateAction;
 import ru.practicum.location.dto.LocationDto;
 import ru.practicum.util.Constants;
 
@@ -40,5 +39,5 @@ public class EventRequestUpdateDto {
     private Integer participantLimit;
     private Boolean paid;
     private Boolean requestModeration;
-    private EventStateAction eventStateAction;
+    private String stateAction;
 }
