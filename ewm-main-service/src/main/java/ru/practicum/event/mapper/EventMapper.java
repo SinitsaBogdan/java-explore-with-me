@@ -45,8 +45,8 @@ public final class EventMapper {
                 .createdOn(model.getCreatedOn())
                 .publishedOn(model.getPublishedOn())
                 .participantLimit(model.getParticipantLimit())
-                .paid(model.getPaid())
                 .requestModeration(model.getRequestModeration())
+                .paid(model.getPaid())
                 .build();
     }
 

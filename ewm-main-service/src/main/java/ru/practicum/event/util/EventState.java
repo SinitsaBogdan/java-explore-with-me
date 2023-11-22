@@ -2,7 +2,9 @@ package ru.practicum.event.util;
 
 public enum EventState {
 
-    PENDING,
-    PUBLISHED,
-    CANCELED
+    PENDING,        // На рассмотрении
+
+    PUBLISHED,      // Опубликован
+
+    CANCELED        // Отпклонен
 }

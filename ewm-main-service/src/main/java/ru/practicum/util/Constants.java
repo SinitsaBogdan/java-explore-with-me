@@ -15,10 +15,10 @@ public class Constants {
     }
 
     public static LocalDateTime getMaxDateTime() {
-        return LocalDateTime.parse("9999-12-31T23:59:59.999999");
+        return LocalDateTime.parse("9999-12-31T23:59:59");
     }
 
     public static LocalDateTime getMinDateTime() {
-        return LocalDateTime.parse("2000-01-01T00:00:00.000000");
+        return LocalDateTime.parse("2000-01-01T00:00:00");
     }
 }

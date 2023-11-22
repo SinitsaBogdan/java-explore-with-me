@@ -16,7 +16,7 @@ public final class ParticipationRequestMapper {
                 .created(model.getCreated())
                 .status(model.getStatus())
                 .event(model.getEvent().getId())
-                .requester(model.getRequester().getId())
+                .requester(model.getUser().getId())
                 .build();
     }
 }
