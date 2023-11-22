@@ -1,8 +1,6 @@
 package ru.practicum.event.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import ru.practicum.category.model.Category;
 import ru.practicum.event.util.EventState;
 import ru.practicum.location.model.Location;
@@ -15,16 +13,17 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "events")
 public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "initiator_id")
     private User initiator;
 
     @ManyToOne
@@ -44,8 +43,8 @@ public class Event {
     @Column(name = "description")
     private String description;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "state")
+    @Enumerated(EnumType.STRING)
     private EventState state;
 
     @Column(name = "date")
