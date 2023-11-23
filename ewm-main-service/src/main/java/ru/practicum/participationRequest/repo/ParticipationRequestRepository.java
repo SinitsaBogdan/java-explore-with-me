@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface ParticipationRequestRepository extends JpaRepository<ParticipationRequest, Long> {
 
-    List<ParticipationRequest> findAllByRequesterId(Long id);
+    List<ParticipationRequest> findAllByUserId(Long id);
 
     List<ParticipationRequest> findAllByEventId(Long id);
 
