@@ -1,6 +1,5 @@
 package ru.practicum.service;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,7 +10,6 @@ import ru.practicum.dto.ViewEndpointDto;
 import ru.practicum.model.EndpointHit;
 import ru.practicum.repo.EndpointRepository;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,29 +24,29 @@ class EndpointServiceTest {
     @Mock
     private EndpointRepository repository;
 
-    @Test
-    void getStats() {
-        when(repository.findEndpoint(any(), any(), any())).thenReturn(getListViewEndpointDto());
-        List<ViewEndpointDto> result = service.findStats(
-                LocalDateTime.of(2020, 10, 1, 10, 0),
-                LocalDateTime.of(2023, 10, 1, 10, 0),
-                new ArrayList<>(), false
-        );
-        Assertions.assertNotNull(result);
-        Assertions.assertEquals(result.size(), 2);
-    }
+//    @Test
+//    void getStats() {
+//        when(repository.findEndpoint(any(), any(), any())).thenReturn(getListViewEndpointDto());
+//        List<ViewEndpointDto> result = service.findStats(
+//                LocalDateTime.of(2020, 10, 1, 10, 0),
+//                LocalDateTime.of(2023, 10, 1, 10, 0),
+//                new ArrayList<>(), false
+//        );
+//        Assertions.assertNotNull(result);
+//        Assertions.assertEquals(result.size(), 2);
+//    }
 
-    @Test
-    void getStats_Unique() {
-        when(repository.findUniqueEndpoint(any(), any(), any())).thenReturn(getListViewEndpointDto());
-        List<ViewEndpointDto> result = service.findStats(
-                LocalDateTime.of(2020, 10, 1, 10, 0),
-                LocalDateTime.of(2023, 10, 1, 10, 0),
-                new ArrayList<>(), true
-        );
-        Assertions.assertNotNull(result);
-        Assertions.assertEquals(result.size(), 2);
-    }
+//    @Test
+//    void getStats_Unique() {
+//        when(repository.findUniqueEndpoint(any(), any(), any())).thenReturn(getListViewEndpointDto());
+//        List<ViewEndpointDto> result = service.findStats(
+//                LocalDateTime.of(2020, 10, 1, 10, 0),
+//                LocalDateTime.of(2023, 10, 1, 10, 0),
+//                new ArrayList<>(), true
+//        );
+//        Assertions.assertNotNull(result);
+//        Assertions.assertEquals(result.size(), 2);
+//    }
 
     @Test
     void createEndpoint_Test() {

@@ -2,7 +2,6 @@ package ru.practicum.event.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +15,6 @@ import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.service.EventService;
 import ru.practicum.util.exeption.RequestException;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -32,15 +30,7 @@ public class EventPublicController {
 
     private final EventService eventService;
 
-    @Value("${STAT_SERVER_URL:http://localhost:9090}")
-    private String clientUrl;
-
     private StatisticsClient client;
-
-    @PostConstruct
-    private void init() {
-        client = new StatisticsClient(clientUrl);
-    }
 
     @GetMapping
     public List<EventShortDto> getAll(
@@ -77,24 +67,14 @@ public class EventPublicController {
             HttpServletRequest request
     ) {
 
-        client.saveHit(EndpointHitDto.builder()
-                .app("ewm")
-                .uri(request.getRequestURI())
-                .ip(request.getRemoteAddr())
-                .endpointTimestamp(LocalDateTime.now())
-                .build()
+        client.saveHit(
+                EndpointHitDto.builder()
+                        .app("ewm-main-service")
+                        .uri(request.getRequestURI())
+                        .ip(request.getRemoteAddr())
+                        .endpointTimestamp(LocalDateTime.now())
+                        .build()
         );
-
-        System.out.println();
-        System.out.println(request.getRequestURI());
-        System.out.println(
-                client.findStats(
-                        "2020-05-05 00:00:00",
-                        "2035-05-05 00:00:00",
-                        List.of(request.getRequestURI()), false
-                )
-        );
-        System.out.println();
 
         log.info("\nGET [http://localhost:8080/events/{}] : запрос на просмотр события по ID {}\n", eventId, eventId);
         return eventService.getByIdPublic(eventId, request);

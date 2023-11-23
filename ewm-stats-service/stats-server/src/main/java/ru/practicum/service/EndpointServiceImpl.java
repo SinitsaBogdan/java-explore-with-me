@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static ru.practicum.util.exeptions.ExceptionMessages.VALIDATOR_ERROR__NOT_VALID_DATETIME;
+import static ru.practicum.util.exeptions.ExceptionMessages.*;
 
 @Slf4j
 @Service
@@ -34,9 +34,9 @@ public class EndpointServiceImpl implements EndpointService {
     @Transactional(readOnly = true)
     public List<ViewEndpointDto> findStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
 
-        if (end.isBefore(start) || start.isAfter(end)) {
-            throw new ValidationDateException(VALIDATOR_ERROR__NOT_VALID_DATETIME);
-        }
+        if (start == null) throw new ValidationDateException(VALIDATOR_ERROR__START_DATETIME__IS_NULL);
+        if (end == null) throw new ValidationDateException(VALIDATOR_ERROR__END_DATETIME__IS_NULL);
+        if (end.isBefore(start) || start.isAfter(end)) throw new ValidationDateException(VALIDATOR_ERROR__NOT_VALID_DATETIME);
 
         if (unique) return repository.findUniqueEndpoint(start, end, uris);
         else return repository.findEndpoint(start, end, uris);

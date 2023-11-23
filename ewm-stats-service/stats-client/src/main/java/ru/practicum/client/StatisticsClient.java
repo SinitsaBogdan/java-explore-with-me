@@ -7,12 +7,11 @@ import ru.practicum.dto.ViewEndpointDto;
 
 import java.util.List;
 
-public class StatisticsClient {
+public final class StatisticsClient {
 
-    private final WebClient webClient;
+    private final WebClient webClient = WebClient.create("http://localhost:9090");
 
-    public StatisticsClient(String serverUrl) {
-        webClient = WebClient.create(serverUrl);
+    private StatisticsClient(String serverUrl) {
     }
 
     public List<ViewEndpointDto> findStats(String start, String end, List<String> uris, Boolean unique) {
@@ -27,6 +26,9 @@ public class StatisticsClient {
     }
 
     public void saveHit(EndpointHitDto endpointHitDto) {
+        System.out.println();
+        System.out.println(true);
+        System.out.println();
         webClient.post()
                 .uri("/hit")
                 .contentType(MediaType.APPLICATION_JSON)

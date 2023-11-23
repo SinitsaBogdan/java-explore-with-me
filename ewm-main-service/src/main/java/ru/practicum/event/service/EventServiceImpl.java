@@ -1,7 +1,6 @@
 package ru.practicum.event.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +33,6 @@ import ru.practicum.util.exeption.CustomException;
 import ru.practicum.util.exeption.NotFoundException;
 import ru.practicum.util.exeption.RequestException;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -53,15 +51,7 @@ public class EventServiceImpl implements EventService {
     private final LocationRepository locationRepository;
     private final ParticipationRequestRepository participationRequestRepository;
 
-    @Value("${STAT_SERVER_URL:http://localhost:9090}")
-    private String statClientUrl;
-
     private StatisticsClient client;
-
-    @PostConstruct
-    private void init() {
-        client = new StatisticsClient(statClientUrl);
-    }
 
     @Override
     public List<EventFullDto> getAllByAdmin(List<Long> users, List<EventState> states, List<Long> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, int from, int size) {
@@ -76,14 +66,14 @@ public class EventServiceImpl implements EventService {
                 .map(event -> "/events/" + event.getId())
                 .collect(Collectors.toList());
 
-        List<ViewEndpointDto> viewEndpointDto = client.findStats(rangeStart.format(Constants.getDefaultDateTimeFormatter()),
+        List<ViewEndpointDto> viewEndpointProjection = client.findStats(rangeStart.format(Constants.getDefaultDateTimeFormatter()),
                 rangeEnd.format(Constants.getDefaultDateTimeFormatter()), eventUrls, true);
 
         return page.getContent().stream()
                 .map(EventMapper::toFullDto)
                 .peek(dto -> {
 
-                    Optional<ViewEndpointDto> optionalViewEndpointDto = viewEndpointDto.stream()
+                    Optional<ViewEndpointDto> optionalViewEndpointDto = viewEndpointProjection.stream()
                             .filter(statsDto -> statsDto.getUri().equals("/events/" + dto.getId()))
                             .findFirst();
 
@@ -315,13 +305,13 @@ public class EventServiceImpl implements EventService {
                 .map(event -> "/events/" + event.getId())
                 .collect(Collectors.toList());
 
-        List<ViewEndpointDto> viewEndpointDtoList = client.findStats(rangeStart.format(Constants.getDefaultDateTimeFormatter()),
+        List<ViewEndpointDto> viewEndpointProjectionList = client.findStats(rangeStart.format(Constants.getDefaultDateTimeFormatter()),
                 rangeEnd.format(Constants.getDefaultDateTimeFormatter()), eventUrls, true);
 
         List<EventShortDto> eventShortDtoList = eventList.stream()
                 .map(EventMapper::toShortDto)
                 .peek(dto -> {
-                    Optional<ViewEndpointDto> matchingStats = viewEndpointDtoList.stream()
+                    Optional<ViewEndpointDto> matchingStats = viewEndpointProjectionList.stream()
                             .filter(statsDto -> statsDto.getUri().equals("/events/" + dto.getId()))
                             .findFirst();
                     dto.setViews(matchingStats.map(ViewEndpointDto::getHits).orElse(0L));
@@ -357,11 +347,11 @@ public class EventServiceImpl implements EventService {
 
         List<String> eventUrls = Collections.singletonList("/events/" + event.getId());
 
-        List<ViewEndpointDto> viewEndpointDtoList = client.findStats(Constants.getMinDateTime().format(Constants.getDefaultDateTimeFormatter()),
+        List<ViewEndpointDto> viewEndpointProjectionList = client.findStats(Constants.getMinDateTime().format(Constants.getDefaultDateTimeFormatter()),
                 Constants.getMaxDateTime().plusYears(1).format(Constants.getDefaultDateTimeFormatter()), eventUrls, true);
 
         EventFullDto dto = EventMapper.toFullDto(event);
-        dto.setViews(viewEndpointDtoList.isEmpty() ? 0L : viewEndpointDtoList.get(0).getHits());
+        dto.setViews(viewEndpointProjectionList.isEmpty() ? 0L : viewEndpointProjectionList.get(0).getHits());
         dto.setConfirmedRequests(participationRequestRepository.countByEventIdAndStatus(dto.getId(), ParticipationRequestState.CONFIRMED));
         return dto;
     }

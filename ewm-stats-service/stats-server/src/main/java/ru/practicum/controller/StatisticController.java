@@ -38,8 +38,8 @@ public class StatisticController {
     public List<ViewEndpointDto> getStats(
             @RequestParam @DateTimeFormat(pattern = DATE_TEMPLATE) LocalDateTime start,
             @RequestParam @DateTimeFormat(pattern = DATE_TEMPLATE) LocalDateTime end,
-            @RequestParam(defaultValue = "false") Boolean unique,
-            @RequestParam(required = false) List<String> uris
+            @RequestParam(required = false) List<String> uris,
+            @RequestParam(defaultValue = "false") Boolean unique
     ) {
         log.info("   GET [http://localhost:9090/stats] : Получение статистики по посещениям");
         return service.findStats(start, end, uris, unique);
