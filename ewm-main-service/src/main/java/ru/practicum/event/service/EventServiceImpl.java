@@ -62,6 +62,8 @@ public class EventServiceImpl implements EventService {
 
         Page<Event> page = eventRepository.findAllByAdmin(users, states, categories, rangeStart, rangeEnd, pageable);
 
+        System.out.println(page.stream().collect(Collectors.toList()));
+
         List<String> eventUrls = page.getContent().stream()
                 .map(event -> "/events/" + event.getId())
                 .collect(Collectors.toList());
@@ -78,7 +80,8 @@ public class EventServiceImpl implements EventService {
                             .findFirst();
 
                     dto.setViews(optionalViewEndpointDto.map(ViewEndpointDto::getHits).orElse(0L));
-                })
+                }
+                )
                 .peek(dto -> dto.setConfirmedRequests(participationRequestRepository.countByEventIdAndStatus(dto.getId(), ParticipationRequestState.CONFIRMED)))
                 .collect(Collectors.toList());
     }
