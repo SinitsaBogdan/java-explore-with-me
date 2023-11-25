@@ -1,11 +1,13 @@
 package ru.practicum.event.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.repo.CategoryRepository;
 import ru.practicum.client.StatisticsClient;
@@ -33,12 +35,14 @@ import ru.practicum.util.exeption.CustomException;
 import ru.practicum.util.exeption.NotFoundException;
 import ru.practicum.util.exeption.RequestException;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Validated
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class EventServiceImpl implements EventService {
@@ -51,9 +55,18 @@ public class EventServiceImpl implements EventService {
     private final LocationRepository locationRepository;
     private final ParticipationRequestRepository participationRequestRepository;
 
+    @Value("${STAT_SERVER_URL:http://localhost:9090}")
+    private String statClientUrl;
+
     private StatisticsClient client;
 
+    @PostConstruct
+    private void init() {
+        client = new StatisticsClient(statClientUrl);
+    }
+
     @Override
+    @Transactional
     public List<EventFullDto> getAllByAdmin(List<Long> users, List<EventState> states, List<Long> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, int from, int size) {
 
         Pageable pageable = PageRequest.of(from, size);
@@ -82,6 +95,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public List<EventShortDto> getAllPublic(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd, boolean onlyAvailable, EventSort sort, int from, int size, HttpServletRequest request) {
 
         if (categories != null && categories.size() == 1 && categories.get(0).equals(0L)) categories = null;
@@ -104,8 +118,11 @@ public class EventServiceImpl implements EventService {
                 .map(event -> "/events/" + event.getId())
                 .collect(Collectors.toList());
 
-        List<ViewEndpointDto> viewStatsListDto = client.findStats(rangeStart.format(Constants.getDefaultDateTimeFormatter()),
-                rangeEnd.format(Constants.getDefaultDateTimeFormatter()), eventUrls, true);
+        List<ViewEndpointDto> viewStatsListDto = client.findStats(
+                rangeStart.format(Constants.getDefaultDateTimeFormatter()),
+                rangeEnd.format(Constants.getDefaultDateTimeFormatter()),
+                eventUrls, true
+        );
 
         List<EventShortDto> eventShortDtoList = eventList.stream()
                 .map(EventMapper::toShortDto)

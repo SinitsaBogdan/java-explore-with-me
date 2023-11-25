@@ -3,7 +3,6 @@ package ru.practicum.event.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.validation.annotation.Validated;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.event.util.EventState;
 import ru.practicum.location.dto.LocationDto;
@@ -14,7 +13,6 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-@Validated
 public class EventFullDto {
 
     private Long id;

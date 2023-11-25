@@ -27,17 +27,15 @@ public class UserServiceImpl implements UserService {
 
         Pageable pageable = PageRequest.of(from, size);
 
-        if (ids != null && !ids.isEmpty()) {
-            return userRepository.findAllByIdIn(ids, pageable)
+        if (ids != null && !ids.isEmpty()) return userRepository.findAllByIdIn(ids, pageable)
                     .getContent().stream()
                     .map(UserMapper::toDto)
                     .collect(Collectors.toList());
-        } else {
-            return userRepository.findAll(pageable)
+
+        else return userRepository.findAll(pageable)
                     .getContent().stream()
                     .map(UserMapper::toDto)
                     .collect(Collectors.toList());
-        }
     }
 
     @Override

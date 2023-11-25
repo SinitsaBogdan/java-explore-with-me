@@ -2,6 +2,7 @@ package ru.practicum.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewEndpointDto;
 import ru.practicum.repo.ViewStatsProjection;
@@ -20,6 +21,7 @@ import static ru.practicum.util.exeptions.ExceptionMessages.*;
 
 @Slf4j
 @Service
+@Validated
 @Transactional
 @RequiredArgsConstructor
 public class EndpointServiceImpl implements EndpointService {

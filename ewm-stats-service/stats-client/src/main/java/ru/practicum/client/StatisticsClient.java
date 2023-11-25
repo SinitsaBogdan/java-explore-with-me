@@ -1,6 +1,7 @@
 package ru.practicum.client;
 
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.practicum.dto.EndpointHitDto;
@@ -8,6 +9,7 @@ import ru.practicum.dto.ViewEndpointDto;
 
 import java.util.List;
 
+@Validated
 public final class StatisticsClient {
 
     private final WebClient webClient;

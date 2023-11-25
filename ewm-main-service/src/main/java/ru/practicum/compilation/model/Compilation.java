@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "compilations")
+@Table(name = "compilations", schema = "public")
 public class Compilation {
 
     @Id

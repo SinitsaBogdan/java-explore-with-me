@@ -8,7 +8,6 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @Data
@@ -26,7 +25,6 @@ public class UserDto {
 
     @Email
     @NotBlank
-    @NotEmpty
     @Size(min = 6, max = 254)
     private String email;
 }

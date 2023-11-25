@@ -13,7 +13,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/compilations")
+@RequestMapping("/compilations")
 public class CompilationPublicController {
 
     private final CompilationService compilationService;

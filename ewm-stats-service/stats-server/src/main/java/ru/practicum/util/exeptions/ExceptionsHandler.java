@@ -13,9 +13,8 @@ import java.util.Map;
 public class ExceptionsHandler {
 
     @ExceptionHandler
-    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleValidationDateException(final ValidationDateException e) {
-        log.info("Дата и время установлены неправильно\n", HttpStatus.BAD_REQUEST);
         return Map.of("Bad Request", e.getMessage());
     }
 }

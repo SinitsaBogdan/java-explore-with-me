@@ -14,7 +14,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/users/{userId}/requests")
+@RequestMapping("/users/{userId}/requests")
 public class ParticipationRequestPrivateController {
 
     private final ParticipationRequestService service;

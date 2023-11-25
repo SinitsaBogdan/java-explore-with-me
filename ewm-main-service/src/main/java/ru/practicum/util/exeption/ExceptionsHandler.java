@@ -18,6 +18,7 @@ public class ExceptionsHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiError handleNotFoundException(NotFoundException e) {
+        log.warn(e.getMessage());
         return ApiError.builder()
                 .status(HttpStatus.NOT_FOUND)
                 .reason("Запрашиваемый объект не найден!")
@@ -29,6 +30,7 @@ public class ExceptionsHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleBadRequestException(RequestException e) {
+        log.warn(e.getMessage());
         return ApiError.builder()
                 .status(HttpStatus.BAD_REQUEST)
                 .reason("Не корректный запрос.")
@@ -40,6 +42,7 @@ public class ExceptionsHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ApiError handleConflictException(CustomException e) {
+        log.warn(e.getMessage());
         return ApiError.builder()
                 .status(HttpStatus.FORBIDDEN)
                 .reason("Не соблюдены условия для выполнения операции!")
@@ -51,6 +54,7 @@ public class ExceptionsHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleBindException(BindException e) {
+        log.warn(e.getMessage());
         return ApiError.builder()
                 .status(HttpStatus.BAD_REQUEST)
                 .reason("Incorrectly made request.")
@@ -64,6 +68,7 @@ public class ExceptionsHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleBindException(MissingServletRequestParameterException e) {
+        log.warn(e.getMessage());
         return ApiError.builder()
                 .status(HttpStatus.BAD_REQUEST)
                 .reason("Не корректно составленый запрос!")
@@ -75,6 +80,7 @@ public class ExceptionsHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ApiError handleDataIntegrityViolationException(DataIntegrityViolationException e) {
+        log.warn(e.getMessage());
         return ApiError.builder()
                 .status(HttpStatus.CONFLICT)
                 .reason("Ограничение целостности было нарушено!")
@@ -86,6 +92,7 @@ public class ExceptionsHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiError handleUnhandled(Exception e) {
+        log.warn(e.getMessage());
         return ApiError.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .reason("Внутренняя ошибка сервера!")

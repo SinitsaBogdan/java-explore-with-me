@@ -23,6 +23,8 @@ public interface ParticipationRequestRepository extends JpaRepository<Participat
             "WHERE pr.event.id = :eventId " +
             "AND pr.status = :status"
     )
-    Long countByEventIdAndStatus(@Param("eventId") Long eventId,
-                                 @Param("status") ParticipationRequestState status);
+    Long countByEventIdAndStatus(
+            @Param("eventId") Long eventId,
+            @Param("status") ParticipationRequestState status
+    );
 }
