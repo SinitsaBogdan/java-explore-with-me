@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewEndpointDto;
+import ru.practicum.repo.ViewStatsProjection;
 import ru.practicum.util.exeptions.ValidationDateException;
 import ru.practicum.mapper.EndpointHitMapper;
 import ru.practicum.model.EndpointHit;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.practicum.util.exeptions.ExceptionMessages.*;
 
@@ -38,7 +40,17 @@ public class EndpointServiceImpl implements EndpointService {
         if (end == null) throw new ValidationDateException(VALIDATOR_ERROR__END_DATETIME__IS_NULL);
         if (end.isBefore(start) || start.isAfter(end)) throw new ValidationDateException(VALIDATOR_ERROR__NOT_VALID_DATETIME);
 
-        if (unique) return repository.findUniqueEndpoint(start, end, uris);
-        else return repository.findEndpoint(start, end, uris);
+        List<ViewStatsProjection> results;
+        if (unique) results = repository.findUniqueStats(start, end, uris);
+        else results = repository.findNotUniqueStats(start, end, uris);
+
+        return results.stream()
+                .map(result -> ViewEndpointDto.builder()
+                        .app(result.getApp())
+                        .uri(result.getUri())
+                        .hits(result.getHits())
+                        .build()
+                )
+                .collect(Collectors.toList());
     }
 }

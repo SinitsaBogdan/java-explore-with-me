@@ -2,6 +2,7 @@ package ru.practicum.event.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.service.EventService;
 import ru.practicum.util.exeption.RequestException;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -30,7 +32,15 @@ public class EventPublicController {
 
     private final EventService eventService;
 
+    @Value("${STAT_SERVER_URL:http://localhost:9090}")
+    private String statClientUrl;
+
     private StatisticsClient client;
+
+    @PostConstruct
+    private void init() {
+        client = new StatisticsClient(statClientUrl);
+    }
 
     @GetMapping
     public List<EventShortDto> getAll(
@@ -39,7 +49,7 @@ public class EventPublicController {
             @RequestParam(required = false) Boolean paid,
             @RequestParam(required = false) @DateTimeFormat(pattern = Constants.DATE_TEMPLATE) LocalDateTime rangeStart,
             @RequestParam(required = false) @DateTimeFormat(pattern = Constants.DATE_TEMPLATE) LocalDateTime rangeEnd,
-            @RequestParam(defaultValue = "false") boolean onlyAvailable,
+            @RequestParam(required = false, defaultValue = "false") boolean onlyAvailable,
             @RequestParam(defaultValue = "VIEWS") EventSort sort,
             @Valid @RequestParam(defaultValue = "0") @Min(0) int from,
             @Valid @RequestParam(defaultValue = "10") @Min(1) int size,
@@ -66,15 +76,14 @@ public class EventPublicController {
             @PathVariable long eventId,
             HttpServletRequest request
     ) {
+        System.out.println("EventPublicController - client.saveHit");
 
-        client.saveHit(
-                EndpointHitDto.builder()
-                        .app("ewm-main-service")
-                        .uri(request.getRequestURI())
-                        .ip(request.getRemoteAddr())
-                        .endpointTimestamp(LocalDateTime.now())
-                        .build()
-        );
+        client.saveHit(EndpointHitDto.builder()
+                .app("ewm")
+                .uri(request.getRequestURI())
+                .ip(request.getRemoteAddr())
+                .endpointTimestamp(LocalDateTime.now())
+                .build());
 
         log.info("\nGET [http://localhost:8080/events/{}] : запрос на просмотр события по ID {}\n", eventId, eventId);
         return eventService.getByIdPublic(eventId, request);

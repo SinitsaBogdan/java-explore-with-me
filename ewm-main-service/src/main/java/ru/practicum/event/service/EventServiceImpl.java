@@ -62,28 +62,74 @@ public class EventServiceImpl implements EventService {
 
         Page<Event> page = eventRepository.findAllByAdmin(users, states, categories, rangeStart, rangeEnd, pageable);
 
-        System.out.println(page.stream().collect(Collectors.toList()));
-
         List<String> eventUrls = page.getContent().stream()
                 .map(event -> "/events/" + event.getId())
                 .collect(Collectors.toList());
 
-        List<ViewEndpointDto> viewEndpointProjection = client.findStats(rangeStart.format(Constants.getDefaultDateTimeFormatter()),
+        List<ViewEndpointDto> viewStatsListDto = client.findStats(rangeStart.format(Constants.getDefaultDateTimeFormatter()),
                 rangeEnd.format(Constants.getDefaultDateTimeFormatter()), eventUrls, true);
 
         return page.getContent().stream()
                 .map(EventMapper::toFullDto)
                 .peek(dto -> {
-
-                    Optional<ViewEndpointDto> optionalViewEndpointDto = viewEndpointProjection.stream()
+                    Optional<ViewEndpointDto> matchingStats = viewStatsListDto.stream()
                             .filter(statsDto -> statsDto.getUri().equals("/events/" + dto.getId()))
                             .findFirst();
-
-                    dto.setViews(optionalViewEndpointDto.map(ViewEndpointDto::getHits).orElse(0L));
-                }
-                )
+                    dto.setViews(matchingStats.map(ViewEndpointDto::getHits).orElse(0L));
+                })
                 .peek(dto -> dto.setConfirmedRequests(participationRequestRepository.countByEventIdAndStatus(dto.getId(), ParticipationRequestState.CONFIRMED)))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<EventShortDto> getAllPublic(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd, boolean onlyAvailable, EventSort sort, int from, int size, HttpServletRequest request) {
+
+        if (categories != null && categories.size() == 1 && categories.get(0).equals(0L)) categories = null;
+        if (rangeStart == null) rangeStart = LocalDateTime.now();
+        if (rangeEnd == null) rangeEnd = Constants.getMaxDateTime();
+
+        List<Event> eventList = eventRepository.getAllPublic(text, categories, paid, rangeStart, rangeEnd);
+
+        if (onlyAvailable) {
+            eventList = eventList.stream()
+                    .filter(
+                            event -> event.getParticipantLimit().equals(0)
+                            || event.getParticipantLimit() < participationRequestRepository.countByEventIdAndStatus(
+                                    event.getId(), ParticipationRequestState.CONFIRMED
+                            ))
+                    .collect(Collectors.toList());
+        }
+
+        List<String> eventUrls = eventList.stream()
+                .map(event -> "/events/" + event.getId())
+                .collect(Collectors.toList());
+
+        List<ViewEndpointDto> viewStatsListDto = client.findStats(rangeStart.format(Constants.getDefaultDateTimeFormatter()),
+                rangeEnd.format(Constants.getDefaultDateTimeFormatter()), eventUrls, true);
+
+        List<EventShortDto> eventShortDtoList = eventList.stream()
+                .map(EventMapper::toShortDto)
+                .peek(dto -> {
+                    Optional<ViewEndpointDto> matchingStats = viewStatsListDto.stream()
+                            .filter(statsDto -> statsDto.getUri().equals("/events/" + dto.getId()))
+                            .findFirst();
+                    dto.setViews(matchingStats.map(ViewEndpointDto::getHits).orElse(0L));
+                })
+                .peek(dto -> dto.setConfirmedRequests(participationRequestRepository.countByEventIdAndStatus(dto.getId(), ParticipationRequestState.CONFIRMED)))
+                .collect(Collectors.toList());
+
+        switch (sort) {
+            case EVENT_DATE:
+                eventShortDtoList.sort(Comparator.comparing(EventShortDto::getEventDate));
+                break;
+            case VIEWS:
+                eventShortDtoList.sort(Comparator.comparing(EventShortDto::getViews).reversed());
+                break;
+        }
+
+        if (from >= eventShortDtoList.size()) return Collections.emptyList();
+        int toIndex = Math.min(from + size, eventShortDtoList.size());
+        return eventShortDtoList.subList(from, toIndex);
     }
 
     @Override
@@ -286,57 +332,6 @@ public class EventServiceImpl implements EventService {
 
         participationRequestRepository.saveAll(requestList);
         return eventResultUpdateStatusDto;
-    }
-
-    @Override
-    public List<EventShortDto> getAllPublic(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd, boolean onlyAvailable, EventSort sort, int from, int size, HttpServletRequest request) {
-
-        if (categories != null && categories.size() == 1 && categories.get(0).equals(0L)) categories = null;
-        if (rangeStart == null) rangeStart = LocalDateTime.now();
-        if (rangeEnd == null) rangeEnd = Constants.getMaxDateTime();
-
-        List<Event> eventList = eventRepository.getAllPublic(text, categories, paid, rangeStart, rangeEnd);
-
-        if (onlyAvailable) {
-            eventList = eventList.stream()
-                    .filter(event -> event.getParticipantLimit().equals(0)
-                            || event.getParticipantLimit() < participationRequestRepository.countByEventIdAndStatus(event.getId(), ParticipationRequestState.CONFIRMED))
-                    .collect(Collectors.toList());
-        }
-
-        List<String> eventUrls = eventList.stream()
-                .map(event -> "/events/" + event.getId())
-                .collect(Collectors.toList());
-
-        List<ViewEndpointDto> viewEndpointProjectionList = client.findStats(rangeStart.format(Constants.getDefaultDateTimeFormatter()),
-                rangeEnd.format(Constants.getDefaultDateTimeFormatter()), eventUrls, true);
-
-        List<EventShortDto> eventShortDtoList = eventList.stream()
-                .map(EventMapper::toShortDto)
-                .peek(dto -> {
-                    Optional<ViewEndpointDto> matchingStats = viewEndpointProjectionList.stream()
-                            .filter(statsDto -> statsDto.getUri().equals("/events/" + dto.getId()))
-                            .findFirst();
-                    dto.setViews(matchingStats.map(ViewEndpointDto::getHits).orElse(0L));
-                })
-                .peek(dto -> dto.setConfirmedRequests(participationRequestRepository.countByEventIdAndStatus(dto.getId(), ParticipationRequestState.CONFIRMED)))
-                .collect(Collectors.toList());
-
-        switch (sort) {
-            case EVENT_DATE:
-                eventShortDtoList.sort(Comparator.comparing(EventShortDto::getEventDate));
-                break;
-            case VIEWS:
-                eventShortDtoList.sort(Comparator.comparing(EventShortDto::getViews).reversed());
-                break;
-        }
-
-        if (from >= eventShortDtoList.size()) {
-            return Collections.emptyList();
-        }
-
-        int toIndex = Math.min(from + size, eventShortDtoList.size());
-        return eventShortDtoList.subList(from, toIndex);
     }
 
     @Override

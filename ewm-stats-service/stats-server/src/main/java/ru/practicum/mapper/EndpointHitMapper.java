@@ -13,7 +13,7 @@ public final class EndpointHitMapper {
                 .app(model.getApp())
                 .uri(model.getUri())
                 .ip(model.getIp())
-                .endpointTimestamp(model.getTimestamp())
+                .endpointTimestamp(model.getHitTimestamp())
                 .build();
     }
 
@@ -22,7 +22,7 @@ public final class EndpointHitMapper {
                 .app(dto.getApp())
                 .uri(dto.getUri())
                 .ip(dto.getIp())
-                .timestamp(dto.getEndpointTimestamp())
+                .hitTimestamp(dto.getEndpointTimestamp())
                 .build();
     }
 }

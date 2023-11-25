@@ -1,6 +1,7 @@
 package ru.practicum.client;
 
 import org.springframework.http.MediaType;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewEndpointDto;
@@ -9,9 +10,10 @@ import java.util.List;
 
 public final class StatisticsClient {
 
-    private final WebClient webClient = WebClient.create("http://localhost:9090");
+    private final WebClient webClient;
 
-    private StatisticsClient(String serverUrl) {
+    public StatisticsClient(String baseUrl) {
+        webClient = WebClient.builder().baseUrl(baseUrl).build();
     }
 
     public List<ViewEndpointDto> findStats(String start, String end, List<String> uris, Boolean unique) {
@@ -26,14 +28,11 @@ public final class StatisticsClient {
     }
 
     public void saveHit(EndpointHitDto endpointHitDto) {
-        System.out.println();
-        System.out.println(true);
-        System.out.println();
         webClient.post()
                 .uri("/hit")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(endpointHitDto)
-                .retrieve()
-                .bodyToMono(Void.class);
+                .body(BodyInserters.fromValue(endpointHitDto))
+                .exchange()
+                .block();
     }
 }

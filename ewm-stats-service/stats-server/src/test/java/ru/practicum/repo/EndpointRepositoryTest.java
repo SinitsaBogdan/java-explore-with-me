@@ -53,7 +53,7 @@ class EndpointRepositoryTest {
         endpointHit.setApp(app);
         endpointHit.setUri(uri);
         endpointHit.setIp(ip);
-        endpointHit.setTimestamp(timestamp);
+        endpointHit.setHitTimestamp(timestamp);
 
         testEntityManager.persist(endpointHit);
     }

@@ -41,7 +41,7 @@ public class StatisticController {
             @RequestParam(required = false) List<String> uris,
             @RequestParam(defaultValue = "false") Boolean unique
     ) {
-        log.info("   GET [http://localhost:9090/stats] : Получение статистики по посещениям");
+        log.info("\nGET [http://localhost:9090/stats] : Получение статистики по посещениям\n");
         return service.findStats(start, end, uris, unique);
     }
 }
