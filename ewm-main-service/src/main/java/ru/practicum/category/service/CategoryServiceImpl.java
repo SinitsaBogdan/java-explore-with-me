@@ -8,6 +8,8 @@ import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.mapper.CategoryMapper;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.repo.CategoryRepository;
+import ru.practicum.event.repo.EventRepository;
+import ru.practicum.util.exeption.CustomException;
 import ru.practicum.util.exeption.NotFoundException;
 
 import java.util.List;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final EventRepository eventRepository;
 
     @Override
     public List<CategoryDto> getAll(int from, int size) {
@@ -62,6 +65,10 @@ public class CategoryServiceImpl implements CategoryService {
     public void delete(long catId) {
         categoryRepository.findById(catId)
                 .orElseThrow(() -> new NotFoundException("Категория с id " + catId + " не найдена!"));
+
+        if (eventRepository.findAllByCategoryId(catId).size() > 0) {
+            throw new CustomException("Категория не может быть удалена, есть связаные записи");
+        }
 
         categoryRepository.deleteById(catId);
     }
