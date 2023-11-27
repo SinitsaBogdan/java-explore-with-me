@@ -24,7 +24,7 @@ public class EventShortDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATE_TEMPLATE)
     private LocalDateTime eventDate;
 
-    private Boolean paid;
+    private boolean paid;
 
     private Long confirmedRequests;
     private Long views;
