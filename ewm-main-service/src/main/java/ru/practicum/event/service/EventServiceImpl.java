@@ -206,7 +206,7 @@ public class EventServiceImpl implements EventService {
     public List<EventShortDto> getAllByInitiator(long userId, int from, int size) {
         Pageable pageable = PageRequest.of(from, size);
         Page<Event> page = eventRepository.findAllByInitiatorId(userId, pageable);
-        if (page.isEmpty()) return new ArrayList<>();
+        if (page.isEmpty()) return Collections.emptyList();
         return page.getContent().stream()
                 .map(EventMapper::toShortDto)
                 .collect(Collectors.toList());
