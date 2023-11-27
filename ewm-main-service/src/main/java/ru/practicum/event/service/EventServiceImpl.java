@@ -307,7 +307,7 @@ public class EventServiceImpl implements EventService {
 
         if (confirmLimit <= 0) throw new CustomException("Лимит участников достигнут.");
 
-        List<ParticipationRequest> requestList = participationRequestRepository.findAllByIdIn(eventRequestUpdateStatusDto.getRequestIds());
+        List<ParticipationRequest> requestList = participationRequestRepository.findAllByIdIn(new ArrayList<>(eventRequestUpdateStatusDto.getRequestIds()));
 
         List<Long> notFoundIds = eventRequestUpdateStatusDto.getRequestIds().stream()
                 .filter(requestId -> requestList.stream().noneMatch(request -> request.getId().equals(requestId)))
