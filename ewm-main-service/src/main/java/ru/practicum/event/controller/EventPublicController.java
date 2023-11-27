@@ -18,7 +18,6 @@ import ru.practicum.util.exeption.RequestException;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -51,8 +50,8 @@ public class EventPublicController {
             @RequestParam(required = false) @DateTimeFormat(pattern = Constants.DATE_TEMPLATE) LocalDateTime rangeEnd,
             @RequestParam(required = false, defaultValue = "false") boolean onlyAvailable,
             @RequestParam(defaultValue = "VIEWS") EventSort sort,
-            @Valid @RequestParam(defaultValue = "0") @Min(0) int from,
-            @Valid @RequestParam(defaultValue = "10") @Min(1) int size,
+            @RequestParam(defaultValue = "0") @Min(0) int from,
+            @RequestParam(defaultValue = "10") @Min(1) int size,
             HttpServletRequest request
     ) {
 

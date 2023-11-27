@@ -24,8 +24,8 @@ public class UserAdminController {
     @GetMapping
     public List<UserDto> get(
             @RequestParam(required = false) List<Long> ids,
-            @Valid @RequestParam(defaultValue = "0") @Min(0) int from,
-            @Valid @RequestParam(defaultValue = "10") @Min(1) int size
+            @RequestParam(defaultValue = "0") @Min(0) int from,
+            @RequestParam(defaultValue = "10") @Min(1) int size
     ) {
         log.info("\nGET [http://localhost:8080/admin/users] : запрос на просмотр пользователей\n");
         return userService.get(ids, from, size);

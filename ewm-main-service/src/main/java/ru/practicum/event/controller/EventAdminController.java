@@ -30,8 +30,8 @@ public class EventAdminController {
             @RequestParam(required = false) List<Long> categories,
             @RequestParam(required = false) @DateTimeFormat(pattern = Constants.DATE_TEMPLATE) LocalDateTime rangeStart,
             @RequestParam(required = false) @DateTimeFormat(pattern = Constants.DATE_TEMPLATE) LocalDateTime rangeEnd,
-            @Valid @RequestParam(defaultValue = "0") @Min(0) int from,
-            @Valid @RequestParam(defaultValue = "10") @Min(1) int size
+            @RequestParam(defaultValue = "0") @Min(0) int from,
+            @RequestParam(defaultValue = "10") @Min(1) int size
     ) {
         log.info("\nGET [http://localhost:8080/admin/events?users={}&states={}&categories={}&rangeStart={}&rangeEnd={}&from={}&size={}] : запрос от администратора на просмотр событий по фильтрам\n", users, states, categories, rangeStart, rangeEnd, from, size);
         return eventService.getAllByAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
