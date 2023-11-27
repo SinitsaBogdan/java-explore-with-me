@@ -62,9 +62,13 @@ public class CompilationServiceImpl implements CompilationService {
         Compilation compilation = compilationRepository.findById(compId)
                 .orElseThrow(() -> new NotFoundException("Сборник с id " + compId + " не найден!"));
 
-        if (compilationRequestUpdateDto.getEvents() != null) compilation.setEvents(
-                eventRepository.findAllById(compilationRequestUpdateDto.getEvents())
-        );
+        if (compilationRequestUpdateDto.getEvents() != null) {
+            if (compilationRequestUpdateDto.getEvents().size() != 0) {
+                compilation.setEvents(
+                        eventRepository.findAllById(compilationRequestUpdateDto.getEvents())
+                );
+            }
+        }
 
         Optional.ofNullable(compilationRequestUpdateDto.getTitle()).ifPresent(compilation::setTitle);
         Optional.ofNullable(compilationRequestUpdateDto.getPinned()).ifPresent(compilation::setPinned);
