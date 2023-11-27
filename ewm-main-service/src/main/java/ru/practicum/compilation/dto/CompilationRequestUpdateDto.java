@@ -17,6 +17,10 @@ public class CompilationRequestUpdateDto {
     @Size(max = 50)
     private String title;
 
-    private Boolean pinned;
+    private boolean pinned;
     private List<Long> events;
+
+    public boolean getPinned() {
+        return pinned;
+    }
 }
