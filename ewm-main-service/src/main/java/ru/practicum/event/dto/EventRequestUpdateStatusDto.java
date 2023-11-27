@@ -8,7 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import ru.practicum.event.util.EventStateAction;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -18,7 +18,7 @@ import java.util.List;
 public class EventRequestUpdateStatusDto {
 
     @NotNull
-    private List<Long> requestIds;
+    private Set<Long> requestIds;
 
     @NotNull
     private EventStateAction status;
