@@ -19,6 +19,7 @@ import ru.practicum.util.exeption.RequestException;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class EventPublicController {
 
     @GetMapping
     public List<EventShortDto> getAll(
-            @RequestParam(defaultValue = "") String text,
+            @RequestParam(defaultValue = "") @Size(max = 2000) String text,
             @RequestParam(required = false) List<Long> categories,
             @RequestParam(required = false) Boolean paid,
             @RequestParam(required = false) @DateTimeFormat(pattern = Constants.DATE_TEMPLATE) LocalDateTime rangeStart,
