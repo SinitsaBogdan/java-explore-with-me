@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import ru.practicum.location.dto.LocationDto;
 import ru.practicum.util.Constants;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -22,7 +23,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class EventNewDto {
 
-    @NotNull
+    @Min(1)
     private Long category;
 
     @NotNull
