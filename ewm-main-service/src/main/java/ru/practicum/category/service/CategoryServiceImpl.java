@@ -53,7 +53,6 @@ public class CategoryServiceImpl implements CategoryService {
 
         Optional.ofNullable(categoryDto.getName()).ifPresent(category::setName);
         Category saveCategory = categoryRepository.save(category);
-
         return CategoryMapper.toDto(saveCategory);
 
     }
@@ -61,7 +60,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public void delete(long catId) {
-        Category category = categoryRepository.findById(catId)
+        categoryRepository.findById(catId)
                 .orElseThrow(() -> new NotFoundException("Категория с id " + catId + " не найдена!"));
 
         categoryRepository.deleteById(catId);
