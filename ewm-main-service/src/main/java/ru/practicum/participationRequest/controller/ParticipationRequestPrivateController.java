@@ -32,7 +32,7 @@ public class ParticipationRequestPrivateController {
             @RequestParam long eventId
     ) {
         log.info("\nPOST [http://localhost:8080/users/{}/requests?eventId={}] : запрос на создание запроса на участие в событии {} от пользователя {}\n", userId, eventId, eventId, userId);
-        return service.create(userId, eventId);
+        return service.add(userId, eventId);
     }
 
     @PatchMapping("/{requestId}/cancel")
@@ -41,6 +41,6 @@ public class ParticipationRequestPrivateController {
             @PathVariable long requestId
     ) {
         log.info("\nPATCH [http://localhost:8080/users/{userId}/requests] : запрос на отмену запроса {} на участие в событии пользователем с ID {}\n", userId, requestId, userId);
-        return service.patch(userId, requestId);
+        return service.update(userId, requestId);
     }
 }

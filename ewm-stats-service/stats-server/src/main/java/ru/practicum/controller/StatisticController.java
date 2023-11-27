@@ -30,7 +30,7 @@ public class StatisticController {
     @ResponseStatus(HttpStatus.CREATED)
     public EndpointHit add(@Valid @RequestBody EndpointHitDto endpointHit) {
         log.info("  POST [http://localhost:9090/hit] : Сохранение информации о том, что был отправлен запрос к конечной точке");
-        return service.save(endpointHit);
+        return service.add(endpointHit);
     }
 
     @GetMapping("/stats")
@@ -42,6 +42,6 @@ public class StatisticController {
             @RequestParam(defaultValue = "false") Boolean unique
     ) {
         log.info("\nGET [http://localhost:9090/stats] : Получение статистики по посещениям\n");
-        return service.findStats(start, end, uris, unique);
+        return service.getStats(start, end, uris, unique);
     }
 }

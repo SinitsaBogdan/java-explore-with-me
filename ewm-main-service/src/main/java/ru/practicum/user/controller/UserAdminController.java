@@ -28,14 +28,14 @@ public class UserAdminController {
             @RequestParam(defaultValue = "10") @Min(1) int size
     ) {
         log.info("\nGET [http://localhost:8080/admin/users] : запрос на просмотр пользователей\n");
-        return userService.get(ids, from, size);
+        return userService.getAll(ids, from, size);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto create(@Valid @RequestBody UserDto userDto) {
         log.info("\nPOST [http://localhost:8080/admin/users] : запрос на создание пользователя {}\n", userDto);
-        return userService.create(userDto);
+        return userService.add(userDto);
     }
 
     @DeleteMapping("/{userId}")

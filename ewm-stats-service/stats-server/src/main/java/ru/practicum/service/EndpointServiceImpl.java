@@ -30,13 +30,13 @@ public class EndpointServiceImpl implements EndpointService {
 
     @Override
     @Transactional
-    public EndpointHit save(EndpointHitDto endpointHitDto) {
+    public EndpointHit add(EndpointHitDto endpointHitDto) {
         return repository.save(EndpointHitMapper.fromDto(endpointHitDto));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<ViewEndpointDto> findStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
+    public List<ViewEndpointDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
 
         if (start == null) throw new ValidationDateException(VALIDATOR_ERROR__START_DATETIME__IS_NULL);
         if (end == null) throw new ValidationDateException(VALIDATOR_ERROR__END_DATETIME__IS_NULL);

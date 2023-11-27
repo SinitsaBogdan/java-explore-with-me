@@ -27,7 +27,7 @@ class EndpointServiceTest {
 //    @Test
 //    void getStats() {
 //        when(repository.findEndpoint(any(), any(), any())).thenReturn(getListViewEndpointDto());
-//        List<ViewEndpointDto> result = service.findStats(
+//        List<ViewEndpointDto> result = service.getStats(
 //                LocalDateTime.of(2020, 10, 1, 10, 0),
 //                LocalDateTime.of(2023, 10, 1, 10, 0),
 //                new ArrayList<>(), false
@@ -39,7 +39,7 @@ class EndpointServiceTest {
 //    @Test
 //    void getStats_Unique() {
 //        when(repository.findUniqueEndpoint(any(), any(), any())).thenReturn(getListViewEndpointDto());
-//        List<ViewEndpointDto> result = service.findStats(
+//        List<ViewEndpointDto> result = service.getStats(
 //                LocalDateTime.of(2020, 10, 1, 10, 0),
 //                LocalDateTime.of(2023, 10, 1, 10, 0),
 //                new ArrayList<>(), true
@@ -51,7 +51,7 @@ class EndpointServiceTest {
     @Test
     void createEndpoint_Test() {
         when(repository.save(any(EndpointHit.class))).thenReturn(new EndpointHit());
-        service.save(EndpointHitDto.builder().build());
+        service.add(EndpointHitDto.builder().build());
 
         verify(repository, times(1)).save(any(EndpointHit.class));
         verifyNoMoreInteractions(repository);

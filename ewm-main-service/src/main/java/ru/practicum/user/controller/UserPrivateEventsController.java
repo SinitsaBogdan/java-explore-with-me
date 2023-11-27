@@ -57,7 +57,7 @@ public class UserPrivateEventsController {
             @Valid @RequestBody EventNewDto eventNewDto
     ) {
         log.info("\nPOST [http://localhost:8080/users/{}/events] : запрос на добавление события {} от пользователя с ID {}\n", userId, eventNewDto, userId);
-        return eventService.create(userId, eventNewDto);
+        return eventService.add(userId, eventNewDto);
     }
 
     @PatchMapping("/{eventId}")
@@ -67,7 +67,7 @@ public class UserPrivateEventsController {
             @Valid @RequestBody EventRequestUpdateDto eventRequestUpdateDto
     ) {
         log.info("PATCH [http://localhost:8080/users/{}/events/{}] : запрос на обновление события {} пользователем с ID {}\n", userId, eventId, eventRequestUpdateDto, userId);
-        return eventService.patchByInitiator(userId, eventId, eventRequestUpdateDto);
+        return eventService.updateByInitiator(userId, eventId, eventRequestUpdateDto);
     }
 
     @PatchMapping("/{eventId}/requests")
@@ -77,6 +77,6 @@ public class UserPrivateEventsController {
             @Valid @RequestBody EventRequestUpdateStatusDto eventRequestUpdateDto
     ) {
         log.info("\nPATCH [http://localhost:8080/users/{}/events/{}/requests] : запрос на обновление статусов запросов на участие в событии {}\n", userId, eventId, eventRequestUpdateDto, userId);
-        return eventService.patchParticipationRequestsByInitiator(userId, eventId, eventRequestUpdateDto);
+        return eventService.updateParticipationRequestsByInitiator(userId, eventId, eventRequestUpdateDto);
     }
 }

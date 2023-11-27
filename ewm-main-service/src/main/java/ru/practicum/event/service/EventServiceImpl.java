@@ -151,7 +151,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public EventFullDto patchByAdmin(long eventId, EventRequestUpdateDto eventRequestUpdateDto) {
+    public EventFullDto updateByAdmin(long eventId, EventRequestUpdateDto eventRequestUpdateDto) {
         Event event = findEventById(eventId);
 
         if (eventRequestUpdateDto.getEventTimestamp() != null && LocalDateTime.now().plusHours(ONE_HOURS).isAfter(eventRequestUpdateDto.getEventTimestamp())) {
@@ -230,7 +230,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public EventFullDto create(long userId, EventNewDto eventNewDto) {
+    public EventFullDto add(long userId, EventNewDto eventNewDto) {
 
         if (eventNewDto.getEventTimestamp().isBefore(LocalDateTime.now().plusHours(TWO_HOURS))) {
             throw new RequestException("Дата события должна быть через 2 часа после текущего времени или позже.");
@@ -254,7 +254,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public EventFullDto patchByInitiator(long userId, long eventId, EventRequestUpdateDto eventRequestUpdateDto) {
+    public EventFullDto updateByInitiator(long userId, long eventId, EventRequestUpdateDto eventRequestUpdateDto) {
 
         Event event = findEventById(eventId);
         checkInitiator(userId, eventId, event.getInitiator().getId());
@@ -298,7 +298,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public EventResultUpdateStatusDto patchParticipationRequestsByInitiator(long userId, long eventId, EventRequestUpdateStatusDto eventRequestUpdateStatusDto) {
+    public EventResultUpdateStatusDto updateParticipationRequestsByInitiator(long userId, long eventId, EventRequestUpdateStatusDto eventRequestUpdateStatusDto) {
 
         findUserById(userId);
         Event event = findEventById(eventId);

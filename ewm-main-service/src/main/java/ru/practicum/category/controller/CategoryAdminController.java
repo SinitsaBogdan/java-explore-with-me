@@ -23,7 +23,7 @@ public class CategoryAdminController {
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto create(@Valid @RequestBody CategoryDto categoryDto) {
         log.info("\nPOST [http://localhost:8080/categories] : запрос на добавление категории {}\n", categoryDto);
-        return categoryService.create(categoryDto);
+        return categoryService.add(categoryDto);
     }
 
     @PatchMapping("/{catId}")
@@ -32,7 +32,7 @@ public class CategoryAdminController {
             @Valid @RequestBody CategoryDto categoryDto
     ) {
         log.info("\nPATCH [http://localhost:8080/categories/{}] : запрос на обновление категории {} c ID {}\n", catId, categoryDto, catId);
-        return categoryService.patch(catId, categoryDto);
+        return categoryService.update(catId, categoryDto);
     }
 
     @DeleteMapping("/{catId}")

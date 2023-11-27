@@ -39,7 +39,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     @Override
     @Transactional
-    public ParticipationRequestDto create(long userId, long eventId) {
+    public ParticipationRequestDto add(long userId, long eventId) {
 
         User requester = findUserById(userId);
         Event event = findEventById(eventId);
@@ -69,7 +69,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     @Override
     @Transactional
-    public ParticipationRequestDto patch(long userId, long requestId) {
+    public ParticipationRequestDto update(long userId, long requestId) {
         findUserById(userId);
         ParticipationRequest participationRequest = findParticipationRequestById(requestId);
 

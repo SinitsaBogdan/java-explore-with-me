@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface EndpointService {
 
-    EndpointHit save(EndpointHitDto endpointHit);
+    EndpointHit add(EndpointHitDto endpointHit);
 
-    List<ViewEndpointDto> findStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique);
+    List<ViewEndpointDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique);
 }

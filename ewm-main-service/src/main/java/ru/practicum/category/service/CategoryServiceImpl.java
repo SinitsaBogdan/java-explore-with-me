@@ -39,7 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public CategoryDto create(CategoryDto categoryDto) {
+    public CategoryDto add(CategoryDto categoryDto) {
         Category category = CategoryMapper.fromDto(categoryDto);
         Category saveCategory = categoryRepository.save(category);
         return CategoryMapper.toDto(saveCategory);
@@ -47,7 +47,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public CategoryDto patch(long catId, CategoryDto categoryDto) {
+    public CategoryDto update(long catId, CategoryDto categoryDto) {
         Category category = categoryRepository.findById(catId)
                 .orElseThrow(() -> new NotFoundException("Категория с id " + catId + " не найдена!"));
 

@@ -45,7 +45,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     @Transactional
-    public CompilationDto create(CompilationNewDto compilationNewDto) {
+    public CompilationDto add(CompilationNewDto compilationNewDto) {
         List<Event> events = compilationNewDto.getEvents() != null && !compilationNewDto.getEvents().isEmpty() ?
                 eventRepository.findAllById(compilationNewDto.getEvents()) : Collections.emptyList();
 
@@ -57,7 +57,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     @Transactional
-    public CompilationDto patch(long compId, CompilationRequestUpdateDto compilationRequestUpdateDto) {
+    public CompilationDto update(long compId, CompilationRequestUpdateDto compilationRequestUpdateDto) {
 
         Compilation compilation = compilationRepository.findById(compId)
                 .orElseThrow(() -> new NotFoundException("Сборник с id " + compId + " не найден!"));

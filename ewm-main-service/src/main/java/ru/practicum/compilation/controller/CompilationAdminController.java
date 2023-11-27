@@ -23,7 +23,7 @@ public class CompilationAdminController {
     @ResponseStatus(HttpStatus.CREATED)
     public CompilationDto create(@Valid @RequestBody CompilationNewDto compilationNewDto) {
         log.info("\nPOST [http://localhost:8080/admin/compilations] : запрос на создание подборки событий {}\n", compilationNewDto);
-        return compilationService.create(compilationNewDto);
+        return compilationService.add(compilationNewDto);
     }
 
     @PatchMapping("/{compId}")
@@ -32,7 +32,7 @@ public class CompilationAdminController {
             @Valid @RequestBody CompilationRequestUpdateDto compilationRequestUpdateDto
     ) {
         log.info("\nPATCH [http://localhost:8080/admin/compilations/{}] : запрос на обновление подборки событий {} с ID {}\n", compId, compilationRequestUpdateDto, compId);
-        return compilationService.patch(compId, compilationRequestUpdateDto);
+        return compilationService.update(compId, compilationRequestUpdateDto);
     }
 
     @DeleteMapping("/{compId}")

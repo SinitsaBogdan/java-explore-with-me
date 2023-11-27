@@ -39,7 +39,7 @@ class StatisticControllerTest {
         String uris = "uri1, uri2";
         String unique = "false";
 
-        when(service.findStats(any(), any(), anyList(), anyBoolean())).thenReturn(null);
+        when(service.getStats(any(), any(), anyList(), anyBoolean())).thenReturn(null);
 
         mockMvc.perform(get("/stats")
                         .param("start", start)
@@ -48,7 +48,7 @@ class StatisticControllerTest {
                         .param("unique", unique))
                 .andExpect(status().is2xxSuccessful());
 
-        verify(service, times(1)).findStats(any(), any(), anyList(), anyBoolean());
+        verify(service, times(1)).getStats(any(), any(), anyList(), anyBoolean());
         verifyNoMoreInteractions(service);
     }
 
@@ -57,7 +57,7 @@ class StatisticControllerTest {
         String start = LocalDateTime.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         String end = LocalDateTime.now().plusDays(2).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-        when(service.findStats(any(), any(), anyList(), anyBoolean())).thenReturn(null);
+        when(service.getStats(any(), any(), anyList(), anyBoolean())).thenReturn(null);
 
         mockMvc.perform(get("/stats")
                         .param("start", start)
@@ -65,7 +65,7 @@ class StatisticControllerTest {
                 .andExpect(status().is2xxSuccessful());
 
         verify(service, times(1))
-                .findStats(LocalDateTime.now().plusDays(1).withNano(0),
+                .getStats(LocalDateTime.now().plusDays(1).withNano(0),
                         LocalDateTime.now().plusDays(2).withNano(0),
                         null,
                         false);
@@ -87,7 +87,7 @@ class StatisticControllerTest {
     void createEndpointHit_allValid() throws Exception {
         EndpointHitDto endpointHitDto = getValidEndpointHitDto();
 
-        when(service.save(any())).thenReturn(any());
+        when(service.add(any())).thenReturn(any());
 
         mockMvc.perform(post("/hit")
                         .content(objectMapper.writeValueAsString(endpointHitDto))
@@ -96,7 +96,7 @@ class StatisticControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful());
 
-        verify(service, times(1)).save(any());
+        verify(service, times(1)).add(any());
         verifyNoMoreInteractions(service);
     }
 

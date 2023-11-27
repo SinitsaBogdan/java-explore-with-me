@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<UserDto> get(List<Long> ids, int from, int size) {
+    public List<UserDto> getAll(List<Long> ids, int from, int size) {
 
         Pageable pageable = PageRequest.of(from, size);
 
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDto create(UserDto userDto) {
+    public UserDto add(UserDto userDto) {
         User user = UserMapper.fromDto(userDto);
         User saveUser = userRepository.save(user);
         return UserMapper.toDto(saveUser);

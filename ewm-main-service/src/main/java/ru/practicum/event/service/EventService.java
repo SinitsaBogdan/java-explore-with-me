@@ -11,26 +11,18 @@ import java.util.List;
 
 public interface EventService {
 
+    EventFullDto getByIdByInitiator(long userId, long eventId);
+
+    EventFullDto getByIdPublic(long eventId, HttpServletRequest request);
+
     List<EventFullDto> getAllByAdmin(
             List<Long> users, List<EventState> states, List<Long> categories, LocalDateTime rangeStart,
             LocalDateTime rangeEnd, int from, int size
     );
 
-    EventFullDto patchByAdmin(long eventId, EventRequestUpdateDto eventRequestUpdateDto);
-
     List<EventShortDto> getAllByInitiator(long userId, int from, int size);
 
-    EventFullDto getByIdByInitiator(long userId, long eventId);
-
     List<ParticipationRequestDto> getParticipationRequestsByInitiator(long userId, long eventId);
-
-    EventFullDto create(long userId, EventNewDto eventNewDto);
-
-    EventFullDto patchByInitiator(long userId, long eventId, EventRequestUpdateDto eventRequestUpdateDto);
-
-    EventResultUpdateStatusDto patchParticipationRequestsByInitiator(
-            long userId, long eventId, EventRequestUpdateStatusDto eventRequestUpdateStatusDto
-    );
 
     List<EventShortDto> getAllPublic(
             String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
@@ -38,5 +30,13 @@ public interface EventService {
             int from, int size, HttpServletRequest request
     );
 
-    EventFullDto getByIdPublic(long eventId, HttpServletRequest request);
+    EventFullDto add(long userId, EventNewDto eventNewDto);
+
+    EventFullDto updateByAdmin(long eventId, EventRequestUpdateDto eventRequestUpdateDto);
+
+    EventFullDto updateByInitiator(long userId, long eventId, EventRequestUpdateDto eventRequestUpdateDto);
+
+    EventResultUpdateStatusDto updateParticipationRequestsByInitiator(
+            long userId, long eventId, EventRequestUpdateStatusDto eventRequestUpdateStatusDto
+    );
 }

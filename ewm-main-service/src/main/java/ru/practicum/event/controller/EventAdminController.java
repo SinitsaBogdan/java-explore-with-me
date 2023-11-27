@@ -43,6 +43,6 @@ public class EventAdminController {
             @Valid @RequestBody EventRequestUpdateDto eventRequestUpdateDto
     ) {
         log.info("\nPATCH [http://localhost:8080/admin/events/{}] : запрос на обновление события с ID {} администратором \n{}\n", eventId, eventId, eventRequestUpdateDto);
-        return eventService.patchByAdmin(eventId, eventRequestUpdateDto);
+        return eventService.updateByAdmin(eventId, eventRequestUpdateDto);
     }
 }
