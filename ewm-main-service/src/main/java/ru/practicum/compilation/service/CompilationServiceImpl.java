@@ -79,7 +79,7 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     @Transactional
     public void delete(long compId) {
-        Compilation compilation = compilationRepository.findById(compId)
+        compilationRepository.findById(compId)
                 .orElseThrow(() -> new NotFoundException("Сборник с id " + compId + " не найден!"));
 
         compilationRepository.deleteById(compId);
