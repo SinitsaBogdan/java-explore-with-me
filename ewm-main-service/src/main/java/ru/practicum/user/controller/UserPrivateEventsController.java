@@ -25,8 +25,8 @@ public class UserPrivateEventsController {
     @GetMapping
     public List<EventShortDto> getAllEventShort(
             @PathVariable long userId,
-            @Valid @RequestParam(defaultValue = "0") @Min(0) int from,
-            @Valid @RequestParam(defaultValue = "10") @Min(1) int size
+            @RequestParam(defaultValue = "0") @Min(0) int from,
+            @RequestParam(defaultValue = "10") @Min(1) int size
     ) {
         log.info("\nGET [http://localhost:8080/users/{}/events] : запрос на просмотр событий, добавленных пользователем с ID {}\n", userId, userId);
         return eventService.getAllByInitiator(userId, from, size);
