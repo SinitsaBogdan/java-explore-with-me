@@ -76,8 +76,6 @@ public class EventPublicController {
             @PathVariable long eventId,
             HttpServletRequest request
     ) {
-        System.out.println("EventPublicController - client.saveHit");
-
         client.saveHit(EndpointHitDto.builder()
                 .app("ewm")
                 .uri(request.getRequestURI())
