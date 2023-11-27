@@ -34,7 +34,8 @@ public final class StatisticsClient {
                 .uri("/hit")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue(endpointHitDto))
-                .exchange()
+                .retrieve()
+                .bodyToMono(Void.class)
                 .block();
     }
 }
