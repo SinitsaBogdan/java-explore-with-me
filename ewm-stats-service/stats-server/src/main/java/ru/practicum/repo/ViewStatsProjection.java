@@ -1,6 +1,7 @@
 package ru.practicum.repo;
 
 public interface ViewStatsProjection {
+
     String getApp();
 
     void setApp(String app);

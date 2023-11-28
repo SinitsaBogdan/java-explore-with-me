@@ -19,12 +19,22 @@ public interface ParticipationRequestRepository extends JpaRepository<Participat
     List<ParticipationRequest> findAllByIdIn(List<Long> ids);
 
     @Query(
-            "SELECT COUNT (pr) FROM ParticipationRequest pr " +
+            "SELECT COUNT(pr) FROM ParticipationRequest pr " +
             "WHERE pr.event.id = :eventId " +
             "AND pr.status = :status"
     )
     Long countByEventIdAndStatus(
             @Param("eventId") Long eventId,
+            @Param("status") ParticipationRequestState status
+    );
+
+    @Query(
+            "SELECT pr.event.id AS eventId, COUNT(pr) AS count " +
+            "FROM ParticipationRequest pr " +
+            "WHERE pr.status = :status " +
+            "GROUP BY pr.event.id"
+    )
+    List<ParticipationRequestCounts> allCountByEventIdAndStatus(
             @Param("status") ParticipationRequestState status
     );
 }

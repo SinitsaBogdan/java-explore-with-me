@@ -26,6 +26,7 @@ import ru.practicum.location.repo.LocationRepository;
 import ru.practicum.participationRequest.dto.ParticipationRequestDto;
 import ru.practicum.participationRequest.mapper.ParticipationRequestMapper;
 import ru.practicum.participationRequest.model.ParticipationRequest;
+import ru.practicum.participationRequest.repo.ParticipationRequestCounts;
 import ru.practicum.participationRequest.repo.ParticipationRequestRepository;
 import ru.practicum.participationRequest.util.ParticipationRequestState;
 import ru.practicum.user.model.User;
@@ -73,24 +74,28 @@ public class EventServiceImpl implements EventService {
         if (rangeStart == null) rangeStart = LocalDateTime.now();
         if (rangeEnd == null) rangeEnd = Constants.getMaxDateTime();
 
-        Page<Event> page = eventRepository.findAllByAdmin(users, states, categories, rangeStart, rangeEnd, pageable);
+        Page<Event> eventPage = eventRepository.findAllByAdmin(users, states, categories, rangeStart, rangeEnd, pageable);
+        List<ParticipationRequestCounts> eventCountRequests = participationRequestRepository.allCountByEventIdAndStatus(ParticipationRequestState.CONFIRMED);
 
-        List<String> eventUrls = page.getContent().stream()
+        List<String> eventUrls = eventPage.getContent().stream()
                 .map(event -> "/events/" + event.getId())
                 .collect(Collectors.toList());
 
         List<ViewEndpointDto> viewStatsListDto = client.findStats(rangeStart.format(Constants.getDefaultDateTimeFormatter()),
                 rangeEnd.format(Constants.getDefaultDateTimeFormatter()), eventUrls, true);
 
-        return page.getContent().stream()
+        return eventPage.getContent().stream()
                 .map(EventMapper::toFullDto)
                 .peek(dto -> {
                     Optional<ViewEndpointDto> matchingStats = viewStatsListDto.stream()
                             .filter(statsDto -> statsDto.getUri().equals("/events/" + dto.getId()))
                             .findFirst();
                     dto.setViews(matchingStats.map(ViewEndpointDto::getHits).orElse(0L));
+                    dto.setConfirmedRequests(eventCountRequests.stream()
+                            .filter(node -> Objects.equals(node.getEventId(), dto.getId()))
+                            .count()
+                    );
                 })
-                .peek(dto -> dto.setConfirmedRequests(participationRequestRepository.countByEventIdAndStatus(dto.getId(), ParticipationRequestState.CONFIRMED)))
                 .collect(Collectors.toList());
     }
 
@@ -103,14 +108,16 @@ public class EventServiceImpl implements EventService {
         if (rangeEnd == null) rangeEnd = Constants.getMaxDateTime();
 
         List<Event> eventList = eventRepository.getAllPublic(text, categories, paid, rangeStart, rangeEnd);
+        List<ParticipationRequestCounts> eventCountRequests = participationRequestRepository.allCountByEventIdAndStatus(ParticipationRequestState.CONFIRMED);
 
         if (onlyAvailable) {
             eventList = eventList.stream()
                     .filter(
                             event -> event.getParticipantLimit().equals(0)
-                            || event.getParticipantLimit() < participationRequestRepository.countByEventIdAndStatus(
-                                    event.getId(), ParticipationRequestState.CONFIRMED
-                            ))
+                            || event.getParticipantLimit() < eventCountRequests.stream()
+                                    .filter(node -> Objects.equals(node.getEventId(), event.getId()))
+                                    .count()
+                    )
                     .collect(Collectors.toList());
         }
 
@@ -131,8 +138,11 @@ public class EventServiceImpl implements EventService {
                             .filter(statsDto -> statsDto.getUri().equals("/events/" + dto.getId()))
                             .findFirst();
                     dto.setViews(matchingStats.map(ViewEndpointDto::getHits).orElse(0L));
+                    dto.setConfirmedRequests(eventCountRequests.stream()
+                            .filter(node -> Objects.equals(node.getEventId(), dto.getId()))
+                            .count()
+                    );
                 })
-                .peek(dto -> dto.setConfirmedRequests(participationRequestRepository.countByEventIdAndStatus(dto.getId(), ParticipationRequestState.CONFIRMED)))
                 .collect(Collectors.toList());
 
         switch (sort) {
