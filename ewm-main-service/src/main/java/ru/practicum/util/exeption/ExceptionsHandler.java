@@ -90,6 +90,18 @@ public class ExceptionsHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ApiError handleAccessDeniedException(AccessDeniedException e) {
+        log.warn(e.getMessage());
+        return ApiError.builder()
+                .status(HttpStatus.FORBIDDEN)
+                .reason("Недостаточно прав для выполнения действий!")
+                .message(e.getMessage())
+                .errorTimestamp(LocalDateTime.now())
+                .build();
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiError handleUnhandled(Exception e) {
         log.warn(e.getMessage());
