@@ -10,6 +10,7 @@ import ru.practicum.comment.dto.RequestCommentDto;
 import ru.practicum.comment.service.CommentService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 
 @Slf4j
 @Validated
@@ -22,14 +23,14 @@ public class CommentAdminController {
 
     @PatchMapping("/{commentId}")
     public CommentDto patch(
-            @PathVariable long commentId,
+            @PathVariable @Min(0) long commentId,
             @Valid @RequestBody RequestCommentDto commentUpdateRequest) {
         return commentService.updateByAdmin(commentId, commentUpdateRequest);
     }
 
     @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable long commentId) {
+    public void delete(@PathVariable @Min(0) long commentId) {
         commentService.deleteByAdmin(commentId);
     }
 }

@@ -9,6 +9,7 @@ import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.service.CategoryService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 
 @Slf4j
 @Validated
@@ -28,7 +29,7 @@ public class CategoryAdminController {
 
     @PatchMapping("/{catId}")
     public CategoryDto patch(
-            @PathVariable long catId,
+            @PathVariable @Min(0) long catId,
             @Valid @RequestBody CategoryDto categoryDto
     ) {
         log.info("\nPATCH [http://localhost:8080/categories/{}] : запрос на обновление категории {} c ID {}\n", catId, categoryDto, catId);
@@ -37,7 +38,7 @@ public class CategoryAdminController {
 
     @DeleteMapping("/{catId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable long catId) {
+    public void delete(@PathVariable @Min(0) long catId) {
         log.info("\nDELETE [http://localhost:8080/categories/{}] : запрос на удаление категории c ID {}\n", catId, catId);
         categoryService.delete(catId);
     }

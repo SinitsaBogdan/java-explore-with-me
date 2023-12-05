@@ -34,8 +34,8 @@ public class UserPrivateEventsController {
 
     @GetMapping("/{eventId}")
     public EventFullDto getById(
-            @PathVariable long userId,
-            @PathVariable long eventId
+            @PathVariable @Min(0) long userId,
+            @PathVariable @Min(0) long eventId
     ) {
         log.info("\nGET [http://localhost:8080/users/{}/events/{}] : запрос на просмотр события {}, добавленного пользователем с ID {}\n", userId, eventId, userId, eventId);
         return eventService.getByIdByInitiator(userId, eventId);
@@ -43,8 +43,8 @@ public class UserPrivateEventsController {
 
     @GetMapping("/{eventId}/requests")
     public List<ParticipationRequestDto> getParticipationRequestsByInitiator(
-            @PathVariable long userId,
-            @PathVariable long eventId
+            @PathVariable @Min(0) long userId,
+            @PathVariable @Min(0) long eventId
     ) {
         log.info("\nGET [http://localhost:8080/users/{}/events/{}/requests] : запрос от инициатора {} события {} на просмотр запросов на участие в событии\n", userId, eventId, userId, eventId);
         return eventService.getParticipationRequestsByInitiator(userId, eventId);
@@ -53,7 +53,7 @@ public class UserPrivateEventsController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EventFullDto create(
-            @PathVariable long userId,
+            @PathVariable @Min(0) long userId,
             @Valid @RequestBody EventNewDto eventNewDto
     ) {
         log.info("\nPOST [http://localhost:8080/users/{}/events] : запрос на добавление события {} от пользователя с ID {}\n", userId, eventNewDto, userId);
@@ -62,8 +62,8 @@ public class UserPrivateEventsController {
 
     @PatchMapping("/{eventId}")
     public EventFullDto patchEventInfo(
-            @PathVariable long userId,
-            @PathVariable long eventId,
+            @PathVariable @Min(0) long userId,
+            @PathVariable @Min(0) long eventId,
             @Valid @RequestBody EventRequestUpdateDto eventRequestUpdateDto
     ) {
         log.info("PATCH [http://localhost:8080/users/{}/events/{}] : запрос на обновление события {} пользователем с ID {}\n", userId, eventId, eventRequestUpdateDto, userId);
@@ -72,8 +72,8 @@ public class UserPrivateEventsController {
 
     @PatchMapping("/{eventId}/requests")
     public EventResultUpdateStatusDto patchEventRequests(
-            @PathVariable long userId,
-            @PathVariable long eventId,
+            @PathVariable @Min(0) long userId,
+            @PathVariable @Min(0) long eventId,
             @Valid @RequestBody EventRequestUpdateStatusDto eventRequestUpdateDto
     ) {
         log.info("\nPATCH [http://localhost:8080/users/{}/events/{}/requests] : запрос на обновление статусов запросов на участие в событии {}\n", userId, eventId, eventRequestUpdateDto, userId);

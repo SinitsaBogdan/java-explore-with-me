@@ -10,6 +10,7 @@ import ru.practicum.comment.dto.RequestCommentDto;
 import ru.practicum.comment.service.CommentService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 
 @Slf4j
 @Validated
@@ -23,8 +24,8 @@ public class CommentPrivateController {
     @PostMapping("/{eventId}")
     @ResponseStatus(HttpStatus.CREATED)
     public CommentDto create(
-            @PathVariable long userId,
-            @PathVariable long eventId,
+            @PathVariable @Min(0) long userId,
+            @PathVariable @Min(0) long eventId,
             @Valid @RequestBody RequestCommentDto dto
     ) {
         return commentService.add(userId, eventId, dto);
@@ -32,8 +33,8 @@ public class CommentPrivateController {
 
     @PatchMapping("/{commentId}")
     public CommentDto patch(
-            @PathVariable long userId,
-            @PathVariable long commentId,
+            @PathVariable @Min(0) long userId,
+            @PathVariable @Min(0) long commentId,
             @Valid @RequestBody RequestCommentDto updateComment
     ) {
         return commentService.updateByUser(userId, commentId, updateComment);
@@ -42,8 +43,8 @@ public class CommentPrivateController {
     @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(
-            @PathVariable long userId,
-            @PathVariable long commentId
+            @PathVariable @Min(0) long userId,
+            @PathVariable @Min(0) long commentId
     ) {
         commentService.deleteByUser(userId, commentId);
     }
