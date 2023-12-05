@@ -20,5 +20,8 @@ public class CommentDto {
     private String text;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATE_TEMPLATE)
-    private LocalDateTime createdOn;
+    private LocalDateTime created;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATE_TEMPLATE)
+    private LocalDateTime updated;
 }

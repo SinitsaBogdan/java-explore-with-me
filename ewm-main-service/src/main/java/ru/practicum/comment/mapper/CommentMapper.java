@@ -13,7 +13,8 @@ public final class CommentMapper {
     public static CommentDto toDto(Comment model) {
         return CommentDto.builder()
                 .userName(model.getUser().getName())
-                .createdOn(model.getCreatedOn())
+                .created(model.getCreated())
+                .updated(model.getUpdated())
                 .text(model.getText())
                 .id(model.getId())
                 .build();
@@ -23,7 +24,7 @@ public final class CommentMapper {
         return Comment.builder()
                 .id(dto.getId())
                 .text(dto.getText())
-                .createdOn(dto.getCreatedOn())
+                .created(dto.getCreated())
                 .build();
     }
 }

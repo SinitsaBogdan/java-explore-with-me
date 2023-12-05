@@ -32,6 +32,9 @@ public class Comment {
     @Column(name = "text")
     private String text;
 
-    @Column(name = "timestamp")
-    private LocalDateTime createdOn;
+    @Column(name = "created_timestamp")
+    private LocalDateTime created;
+
+    @Column(name = "updated_timestamp")
+    private LocalDateTime updated;
 }

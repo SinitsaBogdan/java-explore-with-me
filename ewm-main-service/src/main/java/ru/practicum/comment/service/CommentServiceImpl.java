@@ -47,7 +47,10 @@ public class CommentServiceImpl implements CommentService {
         comment.setUser(user);
         comment.setEvent(event);
         comment.setText(dto.getText());
-        comment.setCreatedOn(LocalDateTime.now());
+
+        LocalDateTime time = LocalDateTime.now();
+        comment.setCreated(time);
+        comment.setUpdated(time);
 
         comment = commentRepository.save(comment);
         return CommentMapper.toDto(comment);
@@ -64,6 +67,7 @@ public class CommentServiceImpl implements CommentService {
         }
 
         Optional.ofNullable(updateRequest.getText()).ifPresent(comment::setText);
+        comment.setUpdated(LocalDateTime.now());
         return CommentMapper.toDto(comment);
     }
 
@@ -73,6 +77,7 @@ public class CommentServiceImpl implements CommentService {
 
         Comment comment = findCommentById(commentId);
         Optional.ofNullable(updateRequest.getText()).ifPresent(comment::setText);
+        comment.setUpdated(LocalDateTime.now());
         return CommentMapper.toDto(comment);
     }
 
