@@ -28,6 +28,7 @@ public class CommentPrivateController {
             @PathVariable @Min(0) long eventId,
             @Valid @RequestBody RequestCommentDto dto
     ) {
+        log.info("\nPOST [http://localhost:8080/users/{}/comments/{}] : запрос на добавление комментария владельцем к событию\n", userId, eventId);
         return commentService.add(userId, eventId, dto);
     }
 
@@ -37,6 +38,7 @@ public class CommentPrivateController {
             @PathVariable @Min(0) long commentId,
             @Valid @RequestBody RequestCommentDto updateComment
     ) {
+        log.info("\nPATCH [http://localhost:8080/users/{}/comments/{}] : запрос на обновление комментария владельцем\n", userId, commentId);
         return commentService.updateByUser(userId, commentId, updateComment);
     }
 
@@ -46,6 +48,7 @@ public class CommentPrivateController {
             @PathVariable @Min(0) long userId,
             @PathVariable @Min(0) long commentId
     ) {
+        log.info("\nDELETE [http://localhost:8080/users/{}/comments/{}] : запрос на удаление комментария владельцем\n", userId, commentId);
         commentService.deleteByUser(userId, commentId);
     }
 }

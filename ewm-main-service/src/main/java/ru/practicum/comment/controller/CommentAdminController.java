@@ -25,12 +25,14 @@ public class CommentAdminController {
     public CommentDto patch(
             @PathVariable @Min(0) long commentId,
             @Valid @RequestBody RequestCommentDto commentUpdateRequest) {
+        log.info("\nPATCH [http://localhost:8080/admin/comments/{}] : запрос на обновление комментария администратором\n", commentId);
         return commentService.updateByAdmin(commentId, commentUpdateRequest);
     }
 
     @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable @Min(0) long commentId) {
+        log.info("\nDELETE [http://localhost:8080/admin/comments/{}] : запрос на удаление комментария администратором\n", commentId);
         commentService.deleteByAdmin(commentId);
     }
 }

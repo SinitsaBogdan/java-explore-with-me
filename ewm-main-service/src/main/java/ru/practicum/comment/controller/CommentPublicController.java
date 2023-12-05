@@ -24,6 +24,7 @@ public class CommentPublicController {
 
     @GetMapping("/{eventId}")
     public List<CommentDto> getAllByEventId(@PathVariable @Min(0) long eventId) {
+        log.info("\nGET [http://localhost:8080/comments/{}] : запрос на просмотр всех комментариев у события\n", eventId, eventId);
         return commentService.getAllByEventId(eventId);
     }
 }
