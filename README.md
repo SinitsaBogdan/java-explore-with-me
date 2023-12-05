@@ -1,2 +1,4 @@
 # java-explore-with-me
-Template repository for ExploreWithMe project.
+Добовление в основной сервис функциональности добавления \ изменения \ удаления комментариев.
+
+[Ссылка на пул реквест](https://github.com/SinitsaBogdan/java-explore-with-me/pull/3)

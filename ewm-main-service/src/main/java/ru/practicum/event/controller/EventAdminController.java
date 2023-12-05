@@ -3,6 +3,7 @@ package ru.practicum.event.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.EventRequestUpdateDto;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/events")
@@ -39,7 +41,7 @@ public class EventAdminController {
 
     @PatchMapping("/{eventId}")
     public EventFullDto patch(
-            @PathVariable long eventId,
+            @PathVariable @Min(0) long eventId,
             @Valid @RequestBody EventRequestUpdateDto eventRequestUpdateDto
     ) {
         log.info("\nPATCH [http://localhost:8080/admin/events/{}] : запрос на обновление события с ID {} администратором \n{}\n", eventId, eventId, eventRequestUpdateDto);

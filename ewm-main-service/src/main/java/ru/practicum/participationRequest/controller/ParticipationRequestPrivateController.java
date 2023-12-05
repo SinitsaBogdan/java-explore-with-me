@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.participationRequest.dto.ParticipationRequestDto;
 import ru.practicum.participationRequest.service.ParticipationRequestService;
 
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @Slf4j
@@ -20,7 +21,7 @@ public class ParticipationRequestPrivateController {
     private final ParticipationRequestService service;
 
     @GetMapping
-    public List<ParticipationRequestDto> getAllParticipationRequest(@PathVariable long userId) {
+    public List<ParticipationRequestDto> getAllParticipationRequest(@PathVariable @Min(0) long userId) {
         log.info("\nGET [http://localhost:8080/users/{userId}/requests] : запрос на просмотр запросов пользователя с ID {} на участие в событиях\n", userId, userId);
         return service.getAll(userId);
     }
@@ -28,8 +29,8 @@ public class ParticipationRequestPrivateController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ParticipationRequestDto create(
-            @PathVariable long userId,
-            @RequestParam long eventId
+            @PathVariable @Min(0) long userId,
+            @RequestParam @Min(0) long eventId
     ) {
         log.info("\nPOST [http://localhost:8080/users/{}/requests?eventId={}] : запрос на создание запроса на участие в событии {} от пользователя {}\n", userId, eventId, eventId, userId);
         return service.add(userId, eventId);
@@ -37,8 +38,8 @@ public class ParticipationRequestPrivateController {
 
     @PatchMapping("/{requestId}/cancel")
     public ParticipationRequestDto patch(
-            @PathVariable long userId,
-            @PathVariable long requestId
+            @PathVariable @Min(0) long userId,
+            @PathVariable @Min(0) long requestId
     ) {
         log.info("\nPATCH [http://localhost:8080/users/{userId}/requests] : запрос на отмену запроса {} на участие в событии пользователем с ID {}\n", userId, requestId, userId);
         return service.update(userId, requestId);

@@ -40,7 +40,7 @@ public class UserAdminController {
 
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable long userId) {
+    public void delete(@PathVariable @Min(0) long userId) {
         log.info("\nDELETE [http://localhost:8080/admin/users] : запрос на удаление пользователя {}\n", userId);
         userService.delete(userId);
     }

@@ -29,7 +29,7 @@ public class CategoryPublicController {
     }
 
     @GetMapping("/{catId}")
-    public CategoryDto getById(@PathVariable long catId) {
+    public CategoryDto getById(@PathVariable @Min(0) long catId) {
         log.info("\nGET [http://localhost:8080/categories/{}] : запрос на просмотр категории по ID {}\n", catId, catId);
         return categoryService.getById(catId);
     }

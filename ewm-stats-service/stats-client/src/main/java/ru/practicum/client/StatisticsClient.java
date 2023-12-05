@@ -1,5 +1,6 @@
 package ru.practicum.client;
 
+
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.reactive.function.BodyInserters;

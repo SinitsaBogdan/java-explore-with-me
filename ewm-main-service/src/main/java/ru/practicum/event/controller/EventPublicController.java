@@ -73,7 +73,7 @@ public class EventPublicController {
 
     @GetMapping("/{eventId}")
     public EventFullDto getById(
-            @PathVariable long eventId,
+            @PathVariable @Min(0) long eventId,
             HttpServletRequest request
     ) {
         client.saveHit(EndpointHitDto.builder()
